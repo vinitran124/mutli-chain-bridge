@@ -1,0 +1,14 @@
+services:
+  api:
+    deploy:
+      replicas: 0
+
+  postgres:
+    ports:
+      - 5433:5432
+
+volumes:
+  postgres_data:
+
+networks:
+  my-network:
