@@ -22,6 +22,8 @@ CREATE TABLE "transactions"(
     "updated_at" timestamp with time zone NOT NULL
 );
 
+CREATE EXTENSION "pgcrypto";
+
 -- +goose Down
 DROP TABLE IF EXISTS tokens;
 DROP TABLE IF EXISTS transactions;

@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"bridge/app/blockchain/chainFactory"

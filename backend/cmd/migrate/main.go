@@ -25,11 +25,8 @@ func init() {
 	}
 }
 func main() {
-	log.Println(1)
 	goose.SetBaseFS(embedMigrations)
-	log.Println(2)
 	utils.SetContextSQL()
-	log.Println(3)
 	app := &cli.App{
 		Name:  "migrate",
 		Usage: "database migration",
@@ -48,7 +45,6 @@ func commandUp() *cli.Command {
 	return &cli.Command{
 		Name: "up",
 		Action: func(c *cli.Context) error {
-			log.Println(SQLRepository().DB.Ping())
 			return goose.Up(SQLRepository().DB, "migrations")
 		},
 	}

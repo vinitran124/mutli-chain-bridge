@@ -1,27 +1,52 @@
-package api
+package main
 
 import (
 	"bridge/app/utils"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
+	"log"
+	"os"
 	"strings"
 	"time"
 )
 
-func NewCommand() *cli.Command {
+const (
+	envPath = ".env"
+)
+
+func init() {
+	if err := godotenv.Overload(strings.Split(envPath, ",")...); err != nil {
+		fmt.Println("Load env error", err.Error())
+	}
+}
+
+func main() {
+	app := &cli.App{
+		Name:  "Content",
+		Usage: "GameFi.org Content",
+		Commands: []*cli.Command{
+			newServerCommand(),
+		},
+	}
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func newServerCommand() *cli.Command {
 	return &cli.Command{
-		Name:  "api",
-		Usage: "Start the API server",
+		Name:  "server",
+		Usage: "start the web server",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  argsAddr,
-				Value: "0.0.0.0:3030",
+				Name:  "addr",
+				Value: "0.0.0.0:8082",
 				Usage: "serve address",
 			},
 		},
-
 		Action: func(c *cli.Context) error {
 			return startAPIServer(c)
 		},
@@ -56,7 +81,7 @@ func startAPIServer(c *cli.Context) error {
 	}
 	fmt.Printf("ListenAndServe: %s\n", addr)
 
-	v1 := router.Group("/api/v1")
+	v1 := router.Group("/content/v1")
 	v1Router(v1)
 
 	return router.Run(addr)

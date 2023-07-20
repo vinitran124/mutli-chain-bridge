@@ -6,13 +6,14 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
+	"log"
 	"os"
 )
 
 const (
 	envDBDataSourcePassword = "POSTGRES_PASSWORD"
 	envDBDataSourceUser     = "POSTGRES_USER"
-	envDBDataSourceHost     = "POSTGRES_HOST"
+	envDBDataSourceHost     = "DB_HOST"
 	envDBDataSourcePort     = "POSTGRES_PORT"
 	envDBDataSourceDB       = "POSTGRES_DB"
 )
@@ -31,6 +32,8 @@ func (r *SQLRepository) Init() error {
 		os.Getenv(envDBDataSourcePort),
 		os.Getenv(envDBDataSourceDB),
 	)
+
+	log.Println(dsn)
 
 	var db *bun.DB
 	db = bun.NewDB(sql.OpenDB(pgdriver.NewConnector(
