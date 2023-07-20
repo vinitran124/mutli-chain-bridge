@@ -1,7 +1,7 @@
 package ethereum
 
 import (
-	"bridge/app/model"
+	"bridge/app/content/bob"
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum"
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (e *Ethereum) getEvents(msg chan model.DepositEvent, contract common.Address) {
+func (e *Ethereum) getEvents(msg chan bob.Transaction, contract common.Address) {
 	block, err := e.latestBlock()
 	if err != nil {
 		fmt.Println(err)
@@ -49,7 +49,7 @@ func (e *Ethereum) getEvents(msg chan model.DepositEvent, contract common.Addres
 	}
 }
 
-func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address) ([]model.DepositEvent, error) {
+func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address) ([]bob.Transaction, error) {
 	// Assume that number is less than current block
 	query := ethereum.FilterQuery{
 		FromBlock: number,
@@ -68,7 +68,7 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 		return nil, err
 	}
 
-	var data []model.DepositEvent
+	var data []bob.Transaction
 
 	for _, vLog := range logs {
 		switch vLog.Topics[0].Hex() {
@@ -84,16 +84,14 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 				continue
 			}
 
-			data = append(data, model.DepositEvent{
-				ID:           0,
+			data = append(data, bob.Transaction{
 				User:         strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
 				Token:        strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
 				RawAmount:    new(big.Int).SetBytes(vLog.Data).String(),
-				ChainId:      e.ChainId,
+				ChainID:      e.ChainId,
 				IsWithdrawal: false,
 				CreatedAt:    timeStamp,
 			})
-
 		}
 	}
 

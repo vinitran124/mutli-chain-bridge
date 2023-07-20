@@ -3,3 +3,4 @@ psql:
   output: "./app/content/bob"
   uuid_pkg: "google"
   no_factory: true
+  pkgname: "bob"

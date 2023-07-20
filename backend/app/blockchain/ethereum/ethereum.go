@@ -2,7 +2,7 @@ package ethereum
 
 import (
 	"bridge/app/blockchain/chainFactory"
-	"bridge/app/model"
+	"bridge/app/content/bob"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -38,7 +38,7 @@ func (e *Ethereum) NewClient() error {
 	return nil
 }
 
-func (e *Ethereum) TrackDeposit(events chan model.DepositEvent) error {
+func (e *Ethereum) TrackDeposit(events chan bob.Transaction) error {
 	bridgeContract := common.HexToAddress(os.Getenv(fmt.Sprintf("%s%s", chainFactory.EnvBridgeContract, e.ChainId)))
 	e.getEvents(events, bridgeContract)
 	return nil
