@@ -6,7 +6,6 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
-	"log"
 	"os"
 )
 
@@ -33,8 +32,6 @@ func (r *SQLRepository) Init() error {
 		os.Getenv(envDBDataSourceDB),
 	)
 
-	log.Println(dsn)
-
 	var db *bun.DB
 	db = bun.NewDB(sql.OpenDB(pgdriver.NewConnector(
 		pgdriver.WithDSN(dsn),
@@ -55,8 +52,5 @@ func NewRepository() (*SQLRepository, error) {
 		return nil, err
 	}
 
-	//if err := model.CreateDatabaseStructure(r.Client); err != nil {
-	//	return nil, err
-	//}
 	return r, nil
 }

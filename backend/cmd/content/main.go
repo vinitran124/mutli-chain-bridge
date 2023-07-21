@@ -43,7 +43,7 @@ func newServerCommand() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "addr",
-				Value: "0.0.0.0:8082",
+				Value: "0.0.0.0:3030",
 				Usage: "serve address",
 			},
 		},
@@ -81,7 +81,7 @@ func startAPIServer(c *cli.Context) error {
 	}
 	fmt.Printf("ListenAndServe: %s\n", addr)
 
-	v1 := router.Group("/content/v1")
+	v1 := router.Group("/api/v1")
 	v1Router(v1)
 
 	return router.Run(addr)

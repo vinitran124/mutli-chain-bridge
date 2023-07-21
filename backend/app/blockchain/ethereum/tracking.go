@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/google/uuid"
 	"math/big"
 	"strings"
 	"time"
@@ -85,12 +86,14 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 			}
 
 			data = append(data, bob.Transaction{
+				ID:           uuid.New(),
 				User:         strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
 				Token:        strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
 				RawAmount:    new(big.Int).SetBytes(vLog.Data).String(),
 				ChainID:      e.ChainId,
 				IsWithdrawal: false,
 				CreatedAt:    timeStamp,
+				UpdatedAt:    timeStamp,
 			})
 		}
 	}

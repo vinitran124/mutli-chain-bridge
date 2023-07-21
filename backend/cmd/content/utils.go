@@ -16,11 +16,15 @@ type Response struct {
 }
 
 func responseSuccess(c *gin.Context, data interface{}) {
-	c.JSON(http.StatusOK, Response{Data: data})
+	c.JSON(http.StatusOK, Response{Code: http.StatusOK, Data: data})
+}
+
+func responseFailureWithMessage(c *gin.Context, message string) {
+	c.JSON(http.StatusOK, Response{Code: http.StatusBadRequest, Data: true, Message: message})
 }
 
 func responseSuccessWithMessage(c *gin.Context, message string) {
-	c.JSON(http.StatusOK, Response{Data: true, Message: message})
+	c.JSON(http.StatusOK, Response{Code: http.StatusOK, Data: true, Message: message})
 }
 
 func responseErrUnauthorized(c *gin.Context) {

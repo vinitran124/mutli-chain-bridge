@@ -48,13 +48,14 @@ func SetContextSQL() {
 		return
 	}
 	background = context.WithValue(background, contextSQLRepository, client)
+	log.Println("connected to database.")
 }
 
 func SetChainClient() {
 	chainList := strings.Split(os.Getenv(envChainIdList), ".")
-	fmt.Println(chainList)
 	for _, chainId := range chainList {
 		chain, err := blockchain.NewChain(chainId)
+		log.Println("chain id :", chainId)
 		if err != nil {
 			fmt.Println("Set context Chain error", err)
 			return

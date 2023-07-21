@@ -18,6 +18,7 @@ type Ethereum struct {
 
 func (e *Ethereum) NewClient() error {
 	chainRpc := os.Getenv(fmt.Sprintf("RPC_%s", e.ChainId))
+	//log.Println(chainRpc)
 	if chainRpc == "" {
 		return fmt.Errorf("chain: Invalid chain id")
 	}

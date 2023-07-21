@@ -1,7 +1,7 @@
 package chainFactory
 
 import (
-	"bridge/app/model"
+	"bridge/app/content/bob"
 	"fmt"
 	"math/big"
 	"os"
@@ -28,7 +28,7 @@ func (c *Chain) Init(chainId string) error {
 type IChain interface {
 	Init(chainId string) error
 	NewClient() error
-	TrackDeposit(events chan model.DepositEvent) error
+	TrackDeposit(events chan bob.Transaction) error
 	CallWithdrawal(token, user, amount string) error
 	GetTokenInPool(token string) (*big.Int, error)
 }

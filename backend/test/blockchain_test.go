@@ -2,7 +2,7 @@ package test
 
 import (
 	"bridge/app/blockchain"
-	"bridge/app/model"
+	"bridge/app/content/bob"
 	"fmt"
 	"github.com/joho/godotenv"
 	"testing"
@@ -19,7 +19,7 @@ func TestTrackingData(t *testing.T) {
 		t.Error(err)
 	}
 
-	events := make(chan model.DepositEvent)
+	events := make(chan bob.Transaction)
 
 	err = chain.TrackDeposit(events)
 	if err != nil {

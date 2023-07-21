@@ -4,11 +4,11 @@ import (
 	"bridge/app/blockchain/chainFactory"
 	"bridge/app/utils"
 	"github.com/redis/go-redis/v9"
-	"github.com/uptrace/bun"
+	"github.com/stephenafamo/bob"
 )
 
-func SQLRepository() *bun.DB {
-	return utils.GetContextSQL().Client
+func SQLRepository() bob.DB {
+	return bob.NewDB(utils.GetContextSQL().Client.DB)
 }
 
 func RedisRepository() *redis.Client {
