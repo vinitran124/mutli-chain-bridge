@@ -43,6 +43,7 @@ type TransactionTemplate struct {
 	IsWithdrawal func() bool
 	CreatedAt    func() time.Time
 	UpdatedAt    func() time.Time
+	Hash         func() string
 
 	f *factory
 }
@@ -82,6 +83,9 @@ func (o TransactionTemplate) toModel() *models.Transaction {
 	}
 	if o.UpdatedAt != nil {
 		m.UpdatedAt = o.UpdatedAt()
+	}
+	if o.Hash != nil {
+		m.Hash = o.Hash()
 	}
 
 	return m
@@ -131,6 +135,9 @@ func (o TransactionTemplate) BuildSetter() *models.TransactionSetter {
 	}
 	if o.UpdatedAt != nil {
 		m.UpdatedAt = omit.From(o.UpdatedAt())
+	}
+	if o.Hash != nil {
+		m.Hash = omit.From(o.Hash())
 	}
 
 	return m
@@ -192,6 +199,9 @@ func ensureCreatableTransaction(m *models.TransactionSetter) {
 	}
 	if m.UpdatedAt.IsUnset() {
 		m.UpdatedAt = omit.From(random[time.Time](nil))
+	}
+	if m.Hash.IsUnset() {
+		m.Hash = omit.From(random[string](nil))
 	}
 }
 
@@ -268,6 +278,7 @@ func (m transactionMods) RandomizeAllColumns(f *faker.Faker) TransactionMod {
 		TransactionMods.RandomIsWithdrawal(f),
 		TransactionMods.RandomCreatedAt(f),
 		TransactionMods.RandomUpdatedAt(f),
+		TransactionMods.RandomHash(f),
 	}
 }
 
@@ -611,6 +622,49 @@ func (m transactionMods) ensureUpdatedAt(f *faker.Faker) TransactionMod {
 
 		o.UpdatedAt = func() time.Time {
 			return random[time.Time](f)
+		}
+	})
+}
+
+// Set the model columns to this value
+func (m transactionMods) Hash(val string) TransactionMod {
+	return TransactionModFunc(func(o *TransactionTemplate) {
+		o.Hash = func() string { return val }
+	})
+}
+
+// Set the Column from the function
+func (m transactionMods) HashFunc(f func() string) TransactionMod {
+	return TransactionModFunc(func(o *TransactionTemplate) {
+		o.Hash = f
+	})
+}
+
+// Clear any values for the column
+func (m transactionMods) UnsetHash() TransactionMod {
+	return TransactionModFunc(func(o *TransactionTemplate) {
+		o.Hash = nil
+	})
+}
+
+// Generates a random value for the column using the given faker
+// if faker is nil, a default faker is used
+func (m transactionMods) RandomHash(f *faker.Faker) TransactionMod {
+	return TransactionModFunc(func(o *TransactionTemplate) {
+		o.Hash = func() string {
+			return random[string](f)
+		}
+	})
+}
+
+func (m transactionMods) ensureHash(f *faker.Faker) TransactionMod {
+	return TransactionModFunc(func(o *TransactionTemplate) {
+		if o.Hash != nil {
+			return
+		}
+
+		o.Hash = func() string {
+			return random[string](f)
 		}
 	})
 }

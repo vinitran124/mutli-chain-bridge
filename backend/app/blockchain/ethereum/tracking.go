@@ -91,6 +91,7 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 				Token:        strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
 				RawAmount:    new(big.Int).SetBytes(vLog.Data).String(),
 				ChainID:      e.ChainId,
+				Hash:         vLog.TxHash.String(),
 				IsWithdrawal: false,
 				CreatedAt:    timeStamp,
 				UpdatedAt:    timeStamp,

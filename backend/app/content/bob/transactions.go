@@ -25,6 +25,7 @@ type Transaction struct {
 	IsWithdrawal bool      `db:"is_withdrawal" `
 	CreatedAt    time.Time `db:"created_at" `
 	UpdatedAt    time.Time `db:"updated_at" `
+	Hash         string    `db:"hash" `
 }
 
 // TransactionSlice is an alias for a slice of pointers to Transaction.
@@ -52,6 +53,7 @@ type TransactionSetter struct {
 	IsWithdrawal omit.Val[bool]      `db:"is_withdrawal"`
 	CreatedAt    omit.Val[time.Time] `db:"created_at"`
 	UpdatedAt    omit.Val[time.Time] `db:"updated_at"`
+	Hash         omit.Val[string]    `db:"hash"`
 }
 
 type transactionColumnNames struct {
@@ -63,6 +65,7 @@ type transactionColumnNames struct {
 	IsWithdrawal string
 	CreatedAt    string
 	UpdatedAt    string
+	Hash         string
 }
 
 var TransactionColumns = struct {
@@ -74,6 +77,7 @@ var TransactionColumns = struct {
 	IsWithdrawal psql.Expression
 	CreatedAt    psql.Expression
 	UpdatedAt    psql.Expression
+	Hash         psql.Expression
 }{
 	ID:           psql.Quote("transactions", "id"),
 	User:         psql.Quote("transactions", "user"),
@@ -83,6 +87,7 @@ var TransactionColumns = struct {
 	IsWithdrawal: psql.Quote("transactions", "is_withdrawal"),
 	CreatedAt:    psql.Quote("transactions", "created_at"),
 	UpdatedAt:    psql.Quote("transactions", "updated_at"),
+	Hash:         psql.Quote("transactions", "hash"),
 }
 
 type transactionWhere[Q psql.Filterable] struct {
@@ -94,6 +99,7 @@ type transactionWhere[Q psql.Filterable] struct {
 	IsWithdrawal psql.WhereMod[Q, bool]
 	CreatedAt    psql.WhereMod[Q, time.Time]
 	UpdatedAt    psql.WhereMod[Q, time.Time]
+	Hash         psql.WhereMod[Q, string]
 }
 
 func TransactionWhere[Q psql.Filterable]() transactionWhere[Q] {
@@ -106,6 +112,7 @@ func TransactionWhere[Q psql.Filterable]() transactionWhere[Q] {
 		IsWithdrawal: psql.Where[Q, bool](TransactionColumns.IsWithdrawal),
 		CreatedAt:    psql.Where[Q, time.Time](TransactionColumns.CreatedAt),
 		UpdatedAt:    psql.Where[Q, time.Time](TransactionColumns.UpdatedAt),
+		Hash:         psql.Where[Q, string](TransactionColumns.Hash),
 	}
 }
 

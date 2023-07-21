@@ -17,6 +17,7 @@ func (ds *DatastoreTransaction) InsertTransaction(ctx context.Context, exec bob.
 		RawAmount:    omit.From(params.RawAmount),
 		ChainID:      omit.From(params.ChainID),
 		IsWithdrawal: omit.From(params.IsWithdrawal),
+		Hash:         omit.From(params.Hash),
 		CreatedAt:    omit.From(params.CreatedAt),
 		UpdatedAt:    omit.From(params.UpdatedAt),
 	}

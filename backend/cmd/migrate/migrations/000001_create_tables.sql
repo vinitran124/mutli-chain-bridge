@@ -27,3 +27,4 @@ CREATE EXTENSION "pgcrypto";
 -- +goose Down
 DROP TABLE IF EXISTS tokens;
 DROP TABLE IF EXISTS transactions;
+DROP EXTENSION IF EXISTS pgcrypto;

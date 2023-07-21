@@ -48,6 +48,7 @@ var ColumnNames = struct {
 		IsWithdrawal: "is_withdrawal",
 		CreatedAt:    "created_at",
 		UpdatedAt:    "updated_at",
+		Hash:         "hash",
 	},
 }
 
