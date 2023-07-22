@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/google/uuid"
 	"math/big"
 	"strings"
 	"time"
@@ -27,7 +26,7 @@ func (e *Ethereum) getEvents(msg chan bob.Transaction, contract common.Address) 
 		}
 
 		if current.Cmp(block) == -1 {
-			timeDelay := (block.Int64()-current.Int64())*int64(e.BlockTime) + 1
+			timeDelay := (block.Int64()-current.Int64())*int64(e.BlockTime) + 10
 			time.Sleep(time.Duration(timeDelay) * time.Second)
 			continue
 		}
@@ -86,15 +85,14 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 			}
 
 			data = append(data, bob.Transaction{
-				ID:           uuid.New(),
-				User:         strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
-				Token:        strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
-				RawAmount:    new(big.Int).SetBytes(vLog.Data).String(),
-				ChainID:      e.ChainId,
-				Hash:         vLog.TxHash.String(),
-				IsWithdrawal: false,
-				CreatedAt:    timeStamp,
-				UpdatedAt:    timeStamp,
+				User:       strings.ToLower(common.HexToAddress(vLog.Topics[1].Hex()).String()),
+				Token:      strings.ToLower(common.HexToAddress(vLog.Topics[2].Hex()).String()),
+				RawAmount:  new(big.Int).SetBytes(vLog.Data).String(),
+				ChainID:    e.ChainId,
+				Hash:       vLog.TxHash.String(),
+				IsComplete: false,
+				CreatedAt:  timeStamp,
+				UpdatedAt:  timeStamp,
 			})
 		}
 	}

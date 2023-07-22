@@ -17,7 +17,7 @@ CREATE TABLE "transactions"(
     "token" text NOT NULL,
     "raw_amount" text NOT NULL,
     "chain_id" text NOT NULL,
-    "is_withdrawal" bool NOT NULL default false,
+    "is_complete" boolean NOT NULL DEFAULT FALSE,
     "created_at" timestamp with time zone NOT NULL,
     "updated_at" timestamp with time zone NOT NULL
 );

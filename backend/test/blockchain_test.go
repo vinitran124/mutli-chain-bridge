@@ -58,13 +58,12 @@ func TestGetTokenAmount(t *testing.T) {
 		fmt.Println("Load env error", err.Error())
 	}
 
-	chain, err := blockchain.NewChain("5555")
+	chain, err := blockchain.NewChain("97")
 	if err != nil {
 		t.Error(err)
 	}
 
-	VINI := "0x596c14ba2b6e759c73895ce13e64e49054181a7f"
-	amount, err := chain.GetTokenInPool(VINI)
+	amount, err := chain.GetTokenInPool("0x32D7eEE6513224f459D221BfED0C3af45343CbB7")
 	if err != nil {
 		t.Error(err)
 	}

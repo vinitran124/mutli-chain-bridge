@@ -13,7 +13,7 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - my-network
+      - bridge
 
   postgres:
     image: postgres:14.1-alpine
@@ -23,7 +23,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data/
+      - ./pgdata/production/data:/var/lib/postgresql/data
+      - ./config/postgres/initdb.d:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -31,17 +32,28 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       PGDATA: /var/lib/postgresql/data
     networks:
-      - my-network
+      - bridge
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 1s
       timeout: 2s
       retries: 5
 
-volumes:
-  postgres_data:
-    driver: local
+  redis:
+    container_name: bridge_redis
+    image: redis:7-alpine
+    networks:
+      - bridge
+    volumes:
+      - ./redisdata:/data
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis-custom.conf
+    restart: unless-stopped
+    command:
+      [
+        "redis-server",
+        "--include /usr/local/etc/redis/redis-custom.conf"
+      ]
 
 networks:
-  my-network:
+  bridge:
 

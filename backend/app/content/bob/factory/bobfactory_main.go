@@ -15,6 +15,7 @@ import (
 )
 
 type factory struct {
+	baseBridgeRequestMods  BridgeRequestModSlice
 	baseGooseDBVersionMods GooseDBVersionModSlice
 	baseTokenMods          TokenModSlice
 	baseTransactionMods    TransactionModSlice
@@ -22,6 +23,18 @@ type factory struct {
 
 func New() *factory {
 	return &factory{}
+}
+
+func (f *factory) NewBridgeRequest(mods ...BridgeRequestMod) *BridgeRequestTemplate {
+	o := &BridgeRequestTemplate{f: f}
+
+	if f != nil {
+		f.baseBridgeRequestMods.Apply(o)
+	}
+
+	BridgeRequestModSlice(mods).Apply(o)
+
+	return o
 }
 
 func (f *factory) NewGooseDBVersion(mods ...GooseDBVersionMod) *GooseDBVersionTemplate {
@@ -60,6 +73,14 @@ func (f *factory) NewTransaction(mods ...TransactionMod) *TransactionTemplate {
 	return o
 }
 
+func (f *factory) ClearBaseBridgeRequestMods() {
+	f.baseBridgeRequestMods = nil
+}
+
+func (f *factory) AddBaseBridgeRequestMod(mods ...BridgeRequestMod) {
+	f.baseBridgeRequestMods = append(f.baseBridgeRequestMods, mods...)
+}
+
 func (f *factory) ClearBaseGooseDBVersionMods() {
 	f.baseGooseDBVersionMods = nil
 }
@@ -87,6 +108,7 @@ func (f *factory) AddBaseTransactionMod(mods ...TransactionMod) {
 type contextKey string
 
 var (
+	bridgeRequestCtx  = newContextual[*models.BridgeRequest]("bridgeRequest")
 	gooseDBVersionCtx = newContextual[*models.GooseDBVersion]("gooseDBVersion")
 	tokenCtx          = newContextual[*models.Token]("token")
 	transactionCtx    = newContextual[*models.Transaction]("transaction")
@@ -133,13 +155,13 @@ func random[T any](f *faker.Faker) T {
 	case int:
 		return any(int(f.Int())).(T)
 
-	case int64:
+	case uuid.UUID:
 		return val
 
 	case time.Time:
 		return val
 
-	case uuid.UUID:
+	case int64:
 		return val
 
 	}

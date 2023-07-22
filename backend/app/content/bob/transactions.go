@@ -17,15 +17,15 @@ import (
 
 // Transaction is an object representing the database table.
 type Transaction struct {
-	ID           uuid.UUID `db:"id,pk" `
-	User         string    `db:"user" `
-	Token        string    `db:"token" `
-	RawAmount    string    `db:"raw_amount" `
-	ChainID      string    `db:"chain_id" `
-	IsWithdrawal bool      `db:"is_withdrawal" `
-	CreatedAt    time.Time `db:"created_at" `
-	UpdatedAt    time.Time `db:"updated_at" `
-	Hash         string    `db:"hash" `
+	ID         uuid.UUID `db:"id,pk" `
+	User       string    `db:"user" `
+	Token      string    `db:"token" `
+	RawAmount  string    `db:"raw_amount" `
+	ChainID    string    `db:"chain_id" `
+	IsComplete bool      `db:"is_complete" `
+	CreatedAt  time.Time `db:"created_at" `
+	UpdatedAt  time.Time `db:"updated_at" `
+	Hash       string    `db:"hash" `
 }
 
 // TransactionSlice is an alias for a slice of pointers to Transaction.
@@ -45,74 +45,74 @@ type TransactionsStmt = bob.QueryStmt[*Transaction, TransactionSlice]
 // All values are optional, and do not have to be set
 // Generated columns are not included
 type TransactionSetter struct {
-	ID           omit.Val[uuid.UUID] `db:"id,pk"`
-	User         omit.Val[string]    `db:"user"`
-	Token        omit.Val[string]    `db:"token"`
-	RawAmount    omit.Val[string]    `db:"raw_amount"`
-	ChainID      omit.Val[string]    `db:"chain_id"`
-	IsWithdrawal omit.Val[bool]      `db:"is_withdrawal"`
-	CreatedAt    omit.Val[time.Time] `db:"created_at"`
-	UpdatedAt    omit.Val[time.Time] `db:"updated_at"`
-	Hash         omit.Val[string]    `db:"hash"`
+	ID         omit.Val[uuid.UUID] `db:"id,pk"`
+	User       omit.Val[string]    `db:"user"`
+	Token      omit.Val[string]    `db:"token"`
+	RawAmount  omit.Val[string]    `db:"raw_amount"`
+	ChainID    omit.Val[string]    `db:"chain_id"`
+	IsComplete omit.Val[bool]      `db:"is_complete"`
+	CreatedAt  omit.Val[time.Time] `db:"created_at"`
+	UpdatedAt  omit.Val[time.Time] `db:"updated_at"`
+	Hash       omit.Val[string]    `db:"hash"`
 }
 
 type transactionColumnNames struct {
-	ID           string
-	User         string
-	Token        string
-	RawAmount    string
-	ChainID      string
-	IsWithdrawal string
-	CreatedAt    string
-	UpdatedAt    string
-	Hash         string
+	ID         string
+	User       string
+	Token      string
+	RawAmount  string
+	ChainID    string
+	IsComplete string
+	CreatedAt  string
+	UpdatedAt  string
+	Hash       string
 }
 
 var TransactionColumns = struct {
-	ID           psql.Expression
-	User         psql.Expression
-	Token        psql.Expression
-	RawAmount    psql.Expression
-	ChainID      psql.Expression
-	IsWithdrawal psql.Expression
-	CreatedAt    psql.Expression
-	UpdatedAt    psql.Expression
-	Hash         psql.Expression
+	ID         psql.Expression
+	User       psql.Expression
+	Token      psql.Expression
+	RawAmount  psql.Expression
+	ChainID    psql.Expression
+	IsComplete psql.Expression
+	CreatedAt  psql.Expression
+	UpdatedAt  psql.Expression
+	Hash       psql.Expression
 }{
-	ID:           psql.Quote("transactions", "id"),
-	User:         psql.Quote("transactions", "user"),
-	Token:        psql.Quote("transactions", "token"),
-	RawAmount:    psql.Quote("transactions", "raw_amount"),
-	ChainID:      psql.Quote("transactions", "chain_id"),
-	IsWithdrawal: psql.Quote("transactions", "is_withdrawal"),
-	CreatedAt:    psql.Quote("transactions", "created_at"),
-	UpdatedAt:    psql.Quote("transactions", "updated_at"),
-	Hash:         psql.Quote("transactions", "hash"),
+	ID:         psql.Quote("transactions", "id"),
+	User:       psql.Quote("transactions", "user"),
+	Token:      psql.Quote("transactions", "token"),
+	RawAmount:  psql.Quote("transactions", "raw_amount"),
+	ChainID:    psql.Quote("transactions", "chain_id"),
+	IsComplete: psql.Quote("transactions", "is_complete"),
+	CreatedAt:  psql.Quote("transactions", "created_at"),
+	UpdatedAt:  psql.Quote("transactions", "updated_at"),
+	Hash:       psql.Quote("transactions", "hash"),
 }
 
 type transactionWhere[Q psql.Filterable] struct {
-	ID           psql.WhereMod[Q, uuid.UUID]
-	User         psql.WhereMod[Q, string]
-	Token        psql.WhereMod[Q, string]
-	RawAmount    psql.WhereMod[Q, string]
-	ChainID      psql.WhereMod[Q, string]
-	IsWithdrawal psql.WhereMod[Q, bool]
-	CreatedAt    psql.WhereMod[Q, time.Time]
-	UpdatedAt    psql.WhereMod[Q, time.Time]
-	Hash         psql.WhereMod[Q, string]
+	ID         psql.WhereMod[Q, uuid.UUID]
+	User       psql.WhereMod[Q, string]
+	Token      psql.WhereMod[Q, string]
+	RawAmount  psql.WhereMod[Q, string]
+	ChainID    psql.WhereMod[Q, string]
+	IsComplete psql.WhereMod[Q, bool]
+	CreatedAt  psql.WhereMod[Q, time.Time]
+	UpdatedAt  psql.WhereMod[Q, time.Time]
+	Hash       psql.WhereMod[Q, string]
 }
 
 func TransactionWhere[Q psql.Filterable]() transactionWhere[Q] {
 	return transactionWhere[Q]{
-		ID:           psql.Where[Q, uuid.UUID](TransactionColumns.ID),
-		User:         psql.Where[Q, string](TransactionColumns.User),
-		Token:        psql.Where[Q, string](TransactionColumns.Token),
-		RawAmount:    psql.Where[Q, string](TransactionColumns.RawAmount),
-		ChainID:      psql.Where[Q, string](TransactionColumns.ChainID),
-		IsWithdrawal: psql.Where[Q, bool](TransactionColumns.IsWithdrawal),
-		CreatedAt:    psql.Where[Q, time.Time](TransactionColumns.CreatedAt),
-		UpdatedAt:    psql.Where[Q, time.Time](TransactionColumns.UpdatedAt),
-		Hash:         psql.Where[Q, string](TransactionColumns.Hash),
+		ID:         psql.Where[Q, uuid.UUID](TransactionColumns.ID),
+		User:       psql.Where[Q, string](TransactionColumns.User),
+		Token:      psql.Where[Q, string](TransactionColumns.Token),
+		RawAmount:  psql.Where[Q, string](TransactionColumns.RawAmount),
+		ChainID:    psql.Where[Q, string](TransactionColumns.ChainID),
+		IsComplete: psql.Where[Q, bool](TransactionColumns.IsComplete),
+		CreatedAt:  psql.Where[Q, time.Time](TransactionColumns.CreatedAt),
+		UpdatedAt:  psql.Where[Q, time.Time](TransactionColumns.UpdatedAt),
+		Hash:       psql.Where[Q, string](TransactionColumns.Hash),
 	}
 }
 

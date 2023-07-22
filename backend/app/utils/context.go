@@ -39,6 +39,7 @@ func SetContextRedisClient() {
 	}
 
 	background = context.WithValue(background, contextRedisClient, redisClient)
+	log.Println("redis", redisClient.Client.Ping(context.Background()).String())
 }
 
 func SetContextSQL() {
@@ -55,13 +56,12 @@ func SetChainClient() {
 	chainList := strings.Split(os.Getenv(envChainIdList), ".")
 	for _, chainId := range chainList {
 		chain, err := blockchain.NewChain(chainId)
-		log.Println("chain id :", chainId)
+		log.Println("init chain id :", chainId)
 		if err != nil {
 			fmt.Println("Set context Chain error", err)
 			return
 		}
 		background = context.WithValue(background, fmt.Sprintf("%s%s", contextChainClient, chainId), chain)
-		log.Println(chainId)
 	}
 }
 

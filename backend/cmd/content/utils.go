@@ -6,7 +6,8 @@ import (
 )
 
 const (
-	argsAddr = "addr"
+	argsAddr        = "addr"
+	redisNewRequest = "NEW_BRIDGE_REQUEST"
 )
 
 type Response struct {

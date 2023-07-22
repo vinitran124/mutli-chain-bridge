@@ -14,8 +14,9 @@ import (
 )
 
 const (
-	envChainIdList = "CHAIN_ID_LIST"
-	envPath        = ".env"
+	envChainIdList       = "CHAIN_ID_LIST"
+	envPath              = ".env"
+	redisNewDepositEvent = "NEW_DEPOSIT_EVENT"
 )
 
 func init() {
@@ -25,8 +26,11 @@ func init() {
 }
 
 func main() {
+	ctx := context.Background()
 	utils.SetContextSQL()
+	utils.SetContextRedisClient()
 	utils.SetChainClient()
+
 	events := make(chan bob.Transaction)
 	chainList := strings.Split(os.Getenv(envChainIdList), ".")
 
@@ -43,12 +47,19 @@ func main() {
 		select {
 		case event := <-events:
 			tx := datastore.DatastoreTransaction{}
-			_, err := tx.InsertTransaction(context.Background(), SQLRepository(), &event)
+			transaction, err := tx.Insert(ctx, SQLRepository(), &event)
 			if err != nil {
 				log.Println(err)
+				continue
 			}
+
+			err = RedisRepository().Publish(ctx, redisNewDepositEvent, transaction.ID.String()).Err()
+			if err != nil {
+				return
+			}
+
 		default:
-			time.Sleep(time.Second)
+			time.Sleep(10 * time.Second)
 		}
 	}
 }

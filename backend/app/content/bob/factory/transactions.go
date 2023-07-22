@@ -35,15 +35,15 @@ func (mods TransactionModSlice) Apply(n *TransactionTemplate) {
 // TransactionTemplate is an object representing the database table.
 // all columns are optional and should be set by mods
 type TransactionTemplate struct {
-	ID           func() uuid.UUID
-	User         func() string
-	Token        func() string
-	RawAmount    func() string
-	ChainID      func() string
-	IsWithdrawal func() bool
-	CreatedAt    func() time.Time
-	UpdatedAt    func() time.Time
-	Hash         func() string
+	ID         func() uuid.UUID
+	User       func() string
+	Token      func() string
+	RawAmount  func() string
+	ChainID    func() string
+	IsComplete func() bool
+	CreatedAt  func() time.Time
+	UpdatedAt  func() time.Time
+	Hash       func() string
 
 	f *factory
 }
@@ -75,8 +75,8 @@ func (o TransactionTemplate) toModel() *models.Transaction {
 	if o.ChainID != nil {
 		m.ChainID = o.ChainID()
 	}
-	if o.IsWithdrawal != nil {
-		m.IsWithdrawal = o.IsWithdrawal()
+	if o.IsComplete != nil {
+		m.IsComplete = o.IsComplete()
 	}
 	if o.CreatedAt != nil {
 		m.CreatedAt = o.CreatedAt()
@@ -127,8 +127,8 @@ func (o TransactionTemplate) BuildSetter() *models.TransactionSetter {
 	if o.ChainID != nil {
 		m.ChainID = omit.From(o.ChainID())
 	}
-	if o.IsWithdrawal != nil {
-		m.IsWithdrawal = omit.From(o.IsWithdrawal())
+	if o.IsComplete != nil {
+		m.IsComplete = omit.From(o.IsComplete())
 	}
 	if o.CreatedAt != nil {
 		m.CreatedAt = omit.From(o.CreatedAt())
@@ -275,7 +275,7 @@ func (m transactionMods) RandomizeAllColumns(f *faker.Faker) TransactionMod {
 		TransactionMods.RandomToken(f),
 		TransactionMods.RandomRawAmount(f),
 		TransactionMods.RandomChainID(f),
-		TransactionMods.RandomIsWithdrawal(f),
+		TransactionMods.RandomIsComplete(f),
 		TransactionMods.RandomCreatedAt(f),
 		TransactionMods.RandomUpdatedAt(f),
 		TransactionMods.RandomHash(f),
@@ -498,43 +498,43 @@ func (m transactionMods) ensureChainID(f *faker.Faker) TransactionMod {
 }
 
 // Set the model columns to this value
-func (m transactionMods) IsWithdrawal(val bool) TransactionMod {
+func (m transactionMods) IsComplete(val bool) TransactionMod {
 	return TransactionModFunc(func(o *TransactionTemplate) {
-		o.IsWithdrawal = func() bool { return val }
+		o.IsComplete = func() bool { return val }
 	})
 }
 
 // Set the Column from the function
-func (m transactionMods) IsWithdrawalFunc(f func() bool) TransactionMod {
+func (m transactionMods) IsCompleteFunc(f func() bool) TransactionMod {
 	return TransactionModFunc(func(o *TransactionTemplate) {
-		o.IsWithdrawal = f
+		o.IsComplete = f
 	})
 }
 
 // Clear any values for the column
-func (m transactionMods) UnsetIsWithdrawal() TransactionMod {
+func (m transactionMods) UnsetIsComplete() TransactionMod {
 	return TransactionModFunc(func(o *TransactionTemplate) {
-		o.IsWithdrawal = nil
+		o.IsComplete = nil
 	})
 }
 
 // Generates a random value for the column using the given faker
 // if faker is nil, a default faker is used
-func (m transactionMods) RandomIsWithdrawal(f *faker.Faker) TransactionMod {
+func (m transactionMods) RandomIsComplete(f *faker.Faker) TransactionMod {
 	return TransactionModFunc(func(o *TransactionTemplate) {
-		o.IsWithdrawal = func() bool {
+		o.IsComplete = func() bool {
 			return random[bool](f)
 		}
 	})
 }
 
-func (m transactionMods) ensureIsWithdrawal(f *faker.Faker) TransactionMod {
+func (m transactionMods) ensureIsComplete(f *faker.Faker) TransactionMod {
 	return TransactionModFunc(func(o *TransactionTemplate) {
-		if o.IsWithdrawal != nil {
+		if o.IsComplete != nil {
 			return
 		}
 
-		o.IsWithdrawal = func() bool {
+		o.IsComplete = func() bool {
 			return random[bool](f)
 		}
 	})
