@@ -1,0 +1,172 @@
+// @ts-nocheck
+import { useEffect, useState } from 'react';
+import Web3, { Contract } from 'web3';
+import Abi from '../const/token.json';
+import { Chain } from '../screen/bridge.screen';
+import { useAppSelector } from './store.hook';
+import BridgeRouterAbi from '../const/bridgerouter.json';
+import { api } from '../api/api';
+
+export const useContract = (
+  contractAddress: any,
+  contractAbi: any = BridgeRouterAbi.abi,
+) => {
+  const [contract, setContract] = useState<Contract<any> | undefined>();
+  const [currentChainId, setCurrentChainId] = useState<bigint | undefined>();
+  const walletAddress = useAppSelector(state => state.address);
+  const web3 = new Web3(window.ethereum);
+
+  const initializeContract = async () => {
+    console.log('contract', contractAddress);
+    if (!walletAddress || !contractAddress) {
+      return;
+    }
+
+    // Check if Web3 is injected by MetaMask or any other Ethereum provider
+    if (window.ethereum) {
+      // Initialize Web3 with the current provider
+      const web3 = new Web3(window.ethereum);
+      try {
+        const networkId = await web3.eth.net.getId();
+
+        // Use the network ID to create an instance of the ERC20 contract
+        const erc20Contract = new web3.eth.Contract(
+          contractAbi,
+          contractAddress,
+        );
+        // Set the contract instance in the context
+        setContract(erc20Contract);
+        console.log('Connected to ERC20 network:', networkId, erc20Contract);
+      } catch (error) {
+        console.error('Error connecting to Ethereum network:', error);
+      }
+    } else {
+      console.error('Web3 provider not found. Please install MetaMask.');
+    }
+  };
+
+  useEffect(() => {
+    initializeContract();
+    getChainId();
+  }, [contractAbi, contractAddress]);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        initializeContract();
+        getChainId();
+      });
+      window.ethereum.on('accountsChanged', () => {
+        initializeContract();
+        getChainId();
+      });
+    }
+  }, []);
+
+  const getTokenAvailableInPool = async (tokenAddress: any) => {
+    if (contract) {
+      try {
+        const web3 = new Web3(window.ethereum);
+        console.log('tokenAdd', tokenAddress);
+        const balance = await contract.methods
+          .getAmountTokenInPool(tokenAddress)
+          .call();
+
+        console.log(contractAddress);
+        const bInt = web3.utils.fromWei(balance, 'ether');
+        return bInt;
+      } catch (error) {
+        console.error('Error checking token balance:', error);
+      }
+    }
+  };
+
+  const getTransferContractAdd = async (tokenAdd: string) => {
+    if (contract) {
+      try {
+        const contractAdd = await contract.methods.bridgePools(tokenAdd).call();
+
+        return contractAdd as string;
+      } catch (error) {
+        console.error('Error get transfer contract add:', error);
+      }
+    }
+  };
+
+  const getChainId = async () => {
+    if (!walletAddress) {
+      return;
+    }
+
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const web3 = new Web3(window.ethereum);
+
+        const chainId = await web3.eth.getChainId();
+        setCurrentChainId(chainId);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      console.error('Metamask not found.');
+    }
+  };
+
+  const changeNetwork = async (chain: Chain) => {
+    if (window.ethereum) {
+      try {
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: web3.utils.toHex(BigInt(chain.chainId)) }],
+        });
+
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: web3.utils.toHex(chain.chainId) }],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const tranfer = async () => {
+    if (contract) {
+      try {
+        const web3 = new Web3(window.ethereum);
+        const balance = await contract.methods
+          .transfer(
+            '0xD1C80e25CDb409b3F3cB9340a8e35f511A7EbE1F',
+            web3.utils.toWei('1000', 'ether'),
+          )
+          .send({ from: '0x06D74c06196a814F56d552aF83F893689e5e7eF8' });
+        const bInt = web3.utils.fromWei(balance, 'ether');
+        console.log('Token balance:', balance, bInt);
+      } catch (error) {
+        console.error('Error checking token balance:', error);
+      }
+    }
+  };
+
+  const deposit = async (tokenAdd: string, amount: string) => {
+    if (contract) {
+      try {
+        await contract.methods
+          .deposit(tokenAdd, web3.utils.toWei(amount, 'ether'))
+          .send({ from: walletAddress });
+      } catch (error) {
+        console.error('Error in deposit:', error, tokenAdd, amount);
+      }
+    }
+  };
+
+  return {
+    getTokenAvailableInPool,
+    tranfer,
+    currentChainId,
+    changeNetwork,
+    getTransferContractAdd,
+    deposit,
+  };
+};
