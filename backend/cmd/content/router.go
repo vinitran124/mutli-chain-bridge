@@ -13,6 +13,7 @@ func v1Router(parent *gin.RouterGroup) {
 	//router.POST("/deposit", helloWorld)
 	//router.GET("/status", helloWorld)
 	router.POST("/bridge", r.bridge)
+	router.POST("/faucet", r.faucet)
 }
 
 func (v *V1Router) helloWorld(c *gin.Context) {

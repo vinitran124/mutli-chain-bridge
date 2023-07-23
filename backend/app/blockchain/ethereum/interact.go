@@ -61,6 +61,19 @@ func (e *Ethereum) CallWithdrawalInContract(auth *bind.TransactOpts, token, user
 	return nil
 }
 
+func (e *Ethereum) Transfer(auth *bind.TransactOpts, token, user string, amount *big.Int) (string, error) {
+	erc20, err := NewErc20Token(common.HexToAddress(token), e.client)
+	if err != nil {
+		return "", err
+	}
+	tx, err := erc20.Transfer(auth, common.HexToAddress(user), amount)
+	if err != nil {
+		return "", err
+	}
+
+	return tx.Hash().Hex(), nil
+}
+
 func (e *Ethereum) GetTokenAmountInPool(token string) (*big.Int, error) {
 	tokenAmount, err := e.bridgeRouter.GetAmountTokenInPool(&bind.CallOpts{}, common.HexToAddress(token))
 	if err != nil {

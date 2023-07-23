@@ -59,3 +59,12 @@ func (e *Ethereum) CallWithdrawal(token, user, amount string) error {
 func (e *Ethereum) GetTokenInPool(token string) (*big.Int, error) {
 	return e.GetTokenAmountInPool(token)
 }
+
+func (e *Ethereum) TransferErc20(token, to, amount string) (string, error) {
+	privateKey := os.Getenv(fmt.Sprintf("%s%s", chainFactory.EnvPrivateKey, e.ChainId))
+	auth, err := e.Auth(privateKey)
+	if err != nil {
+		return "", err
+	}
+	return e.Transfer(auth, token, to, StringToBigInt(amount))
+}

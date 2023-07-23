@@ -31,4 +31,5 @@ type IChain interface {
 	TrackDeposit(events chan bob.Transaction) error
 	CallWithdrawal(token, user, amount string) error
 	GetTokenInPool(token string) (*big.Int, error)
+	TransferErc20(token, to, amount string) (string, error)
 }
