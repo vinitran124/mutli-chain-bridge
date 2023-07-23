@@ -12,6 +12,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - bridge
 
@@ -48,11 +50,20 @@ services:
       - ./redisdata:/data
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis-custom.conf
     restart: unless-stopped
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     command:
       [
         "redis-server",
         "--include /usr/local/etc/redis/redis-custom.conf"
       ]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+
 
 networks:
   bridge:

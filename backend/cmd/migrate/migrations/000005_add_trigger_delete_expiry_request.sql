@@ -1,4 +1,4 @@
--- -- +goose Up
+-- +goose Up
 -- CREATE OR REPLACE FUNCTION delete_old_bridge_request()
 -- RETURNS TRIGGER AS $TRIGGER$
 -- BEGIN
@@ -12,6 +12,6 @@
 --     AFTER INSERT ON bridge_requests
 --     EXECUTE PROCEDURE delete_old_bridge_request();
 --
--- -- +goose Down
+-- +goose Down
 -- DROP TRIGGER IF EXISTS trigger_delete_old_bridge_request;
 -- DROP FUNCTION IF EXISTS delete_old_bridge_request();
