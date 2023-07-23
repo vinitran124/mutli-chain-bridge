@@ -45,11 +45,17 @@ func SetContextRedisClient() {
 func SetContextSQL() {
 	client, err := database.NewRepository()
 	if err != nil {
-		fmt.Println("Set context SQL error", err)
+		log.Println("Set context SQL error", err)
 		return
 	}
 	background = context.WithValue(background, contextSQLRepository, client)
-	log.Println("connected to database.")
+	err = client.Client.Ping()
+	if err != nil {
+		log.Println("Set context SQL error", err)
+		return
+	}
+	log.Println("postgres: connected to database")
+
 }
 
 func SetChainClient() {

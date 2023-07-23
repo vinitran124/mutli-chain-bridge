@@ -1,11 +1,11 @@
 services:
-  api:
-    deploy:
-      replicas: 0
+#  api:
+#    deploy:
+#      replicas: 0
 
-  postgres:
-    ports:
-      - 5433:5432
+#  postgres:
+#    ports:
+#      - 5433:5432
 
   redis:
     ports:
