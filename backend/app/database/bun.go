@@ -14,7 +14,7 @@ const (
 	envDBDataSourcePassword = "POSTGRES_PASSWORD"
 	envDBDataSourceUser     = "POSTGRES_USER"
 	envDBDataSourceHost     = "POSTGRES_HOST"
-	envDBDataSourcePort     = "POSTGRES_PORT"
+	envDBDataSourcePort     = "DB_PORT"
 	envDBDataSourceDB       = "POSTGRES_DB"
 )
 

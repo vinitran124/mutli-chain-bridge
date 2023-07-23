@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	envPath = ".env"
+	envPath = ".env,.env.local"
 )
 
 //go:embed migrations/*.sql

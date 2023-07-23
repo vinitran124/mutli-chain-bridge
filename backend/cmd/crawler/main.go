@@ -15,7 +15,7 @@ import (
 
 const (
 	envChainIdList       = "CHAIN_ID_LIST"
-	envPath              = ".env"
+	envPath              = ".env,.env.local"
 	redisNewDepositEvent = "NEW_DEPOSIT_EVENT"
 )
 

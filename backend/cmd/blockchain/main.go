@@ -13,7 +13,7 @@ import (
 const (
 	redisNewDepositEvent = "NEW_DEPOSIT_EVENT"
 	redisNewRequest      = "NEW_BRIDGE_REQUEST"
-	envPath              = ".env"
+	envPath              = ".env,.env.local"
 )
 
 func init() {
