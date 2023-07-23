@@ -1,7 +1,7 @@
 services:
-#  api:
-#    deploy:
-#      replicas: 0
+  api:
+    deploy:
+      replicas: 0
 
   postgres:
     ports:

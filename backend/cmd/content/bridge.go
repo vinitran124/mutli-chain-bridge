@@ -27,12 +27,16 @@ func (v *V1Router) bridge(c *gin.Context) {
 		return
 	}
 
+	log.Println("token", auth.TokenAddress)
+	log.Println("token chain", auth.InChain)
+
 	tokenIn, err := bob.Tokens(
 		ctx,
 		SQLRepository(),
 		bob.SelectWhere.Tokens.Address.EQ(auth.TokenAddress),
 		bob.SelectWhere.Tokens.ChainID.EQ(auth.InChain)).One()
 	if err != nil {
+		log.Println("asb", err)
 		responseFailureWithMessage(c, "invalid input token")
 		return
 	}
@@ -43,6 +47,7 @@ func (v *V1Router) bridge(c *gin.Context) {
 		bob.SelectWhere.Tokens.Name.EQ(tokenIn.Name),
 		bob.SelectWhere.Tokens.ChainID.EQ(auth.OutChain)).One()
 	if err != nil {
+		log.Println("asb1")
 		responseFailureWithMessage(c, "invalid output token")
 		return
 	}

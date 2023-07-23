@@ -6,6 +6,7 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
+	"log"
 	"os"
 )
 
@@ -31,6 +32,8 @@ func (r *SQLRepository) Init() error {
 		os.Getenv(envDBDataSourcePort),
 		os.Getenv(envDBDataSourceDB),
 	)
+
+	log.Println(dsn)
 
 	var db *bun.DB
 	db = bun.NewDB(sql.OpenDB(pgdriver.NewConnector(
