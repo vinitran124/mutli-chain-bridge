@@ -38,47 +38,40 @@ func main() {
 
 	go func() {
 		for msg := range eventCh {
-			log.Println("uuid payload", msg.Payload)
 			bridgeRq, err := bridgeStr.CheckValidForWithdrawal(ctx, SQLRepository(), msg.Payload)
 			if err != nil {
 				log.Println(err)
 				continue
 			}
-			log.Println(1)
 
 			if bridgeRq == nil {
 				log.Println(fmt.Sprintf("event id %s: not valid with request", msg.Payload))
 				continue
 			}
-			log.Println(2)
 
 			token, err := tokenStr.FindTokenInOutputChain(ctx, SQLRepository(), bridgeRq.Token, bridgeRq.InputChain, bridgeRq.OutputChain)
 			if err != nil {
 				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
 				continue
 			}
-			log.Println(3)
 
 			err = ChainRepository(token.ChainID).CallWithdrawal(token.Address, bridgeRq.UserAddress, bridgeRq.RawAmount)
 			if err != nil {
 				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
 				continue
 			}
-			log.Println(4)
 
 			err = bridgeStr.SetComplete(ctx, SQLRepository(), bridgeRq.ID.String())
 			if err != nil {
 				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
 				continue
 			}
-			log.Println(1)
 
 			err = transactionStr.SetComplete(ctx, SQLRepository(), msg.Payload)
 			if err != nil {
 				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
 				continue
 			}
-			log.Println(1)
 		}
 	}()
 
