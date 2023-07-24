@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"github.com/redis/go-redis/v9"
+	"log"
 	"os"
 )
 
@@ -18,6 +19,7 @@ type RedisRepository struct {
 
 func (r *RedisRepository) Init() error {
 	redisAddr := fmt.Sprintf("%s:%s", os.Getenv(envRDDataSourceHost), os.Getenv(envRDDataSourcePort))
+	log.Println("redis: ", redisAddr)
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     redisAddr,
 		Password: os.Getenv(envRDDataSourcePassword), // no password set
