@@ -161,6 +161,18 @@ export const useContract = (
     }
   };
 
+  const addLiquidity =async (tokenAdd:string, amount: string) => {
+    if (contract) {
+      try {
+        await contract.methods
+          .addLiquidity(tokenAdd, web3.utils.toWei(amount, 'ether'))
+          .send({ from: walletAddress });
+      } catch (error) {
+        console.error('Error in deposit:', error, tokenAdd, amount);
+      }
+    }
+  }
+
   return {
     getTokenAvailableInPool,
     tranfer,
@@ -168,5 +180,6 @@ export const useContract = (
     changeNetwork,
     getTransferContractAdd,
     deposit,
+    addLiquidity
   };
 };
