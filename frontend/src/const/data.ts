@@ -6,12 +6,6 @@ const chain = [
     bridgeContractAddress: '0xd15e20F76DC9D2f0671a2E20c303c42d1445c8dd',
   },
   {
-    chainId: '5',
-    name: 'ETH Goerli',
-    img: '',
-    bridgeContractAddress: '',
-  },
-  {
     chainId: '5555',
     name: 'CVC Testnet',
     img: '',
@@ -54,5 +48,5 @@ const coin: { [key: string]: { name: string; address: string }[] } = {
 
 export const Data = {
   chain,
-  coin
+  coin,
 };

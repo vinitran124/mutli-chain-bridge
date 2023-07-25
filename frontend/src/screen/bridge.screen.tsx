@@ -65,6 +65,9 @@ export const Bridge = ({ sidebarSubject }: Props) => {
 
         const timeout = setTimeout(() => {
             getTokenAvailableInPool(coin.address).then(amount => setTokenAvailable(amount));
+            if (coin.name != "VINI") {
+                web3.eth.getBalance(walletAddress).then(balance => setTokenAmountMax(web3.utils.fromWei(balance, 'ether')))
+            }
             getWalletTokenAmount().then(amount => setTokenAmountMax(amount));
             clearTimeout(timeout)
         }, 3000)

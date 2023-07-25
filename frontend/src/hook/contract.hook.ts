@@ -5,7 +5,6 @@ import Abi from '../const/token.json';
 import { Chain } from '../screen/bridge.screen';
 import { useAppSelector } from './store.hook';
 import BridgeRouterAbi from '../const/bridgerouter.json';
-import { api } from '../api/api';
 
 export const useContract = (
   contractAddress: any,
@@ -161,6 +160,80 @@ export const useContract = (
     }
   };
 
+  const getAmountSwap = async (
+    amount: string,
+    tokenIn: string,
+    tokenOut: string,
+  ) => {
+    if (contract) {
+      try {
+        const amountOut = (await contract.methods
+          .getAmountOut(web3.utils.toWei(amount, 'ether'), tokenIn, tokenOut)
+          .call()) as bigint;
+
+        return web3.utils.fromWei(amountOut, 'ether').toString();
+      } catch (error) {
+        console.error(
+          'Error in getAmountt:',
+          error,
+          web3.utils.toWei(amount, 'ether'),
+          tokenIn,
+          tokenOut,
+        );
+      }
+    }
+  };
+
+  const swapForToken = async (
+    amountIn: string,
+    amountOut: string,
+    tokenIn: string,
+    tokenOut: string,
+  ) => {
+    if (contract) {
+      try {
+        await contract.methods
+          .swapExactETHForTokens(
+            web3.utils.toWei(+amountOut * 0.9, 'ether'),
+            [tokenIn, tokenOut],
+            walletAddress,
+            Date.now() + 300,
+          )
+          .send({
+            from: walletAddress,
+            value: web3.utils.toWei(amountIn, 'ether'),
+          });
+      } catch (error) {
+        console.error('Error in getAmountt:', error);
+      }
+    }
+  };
+
+  const swapForCoin = async (
+    amountIn: string,
+    amountOut: string,
+    tokenIn: string,
+    tokenOut: string,
+  ) => {
+    if (contract) {
+      try {
+        await contract.methods
+          .swapExactTokensForETH(
+            web3.utils.toWei(+amountIn, 'ether'),
+            web3.utils.toWei(+amountOut * 0.9, 'ether'),
+            [tokenIn, tokenOut],
+            walletAddress,
+            Date.now() + 300,
+          )
+          .send({
+            from: walletAddress,
+          });
+      } catch (error) {
+        console.error('Error in getAmountt:', error);
+      }
+    }
+  };
+
   return {
     getTokenAvailableInPool,
     tranfer,
@@ -168,5 +241,8 @@ export const useContract = (
     changeNetwork,
     getTransferContractAdd,
     deposit,
+    getAmountSwap,
+    swapForToken,
+    swapForCoin,
   };
 };

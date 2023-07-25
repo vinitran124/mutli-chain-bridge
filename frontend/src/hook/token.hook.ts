@@ -46,7 +46,7 @@ export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
       try {
         const web3 = new Web3(window.ethereum);
         const balance = await contract.methods.balanceOf(walletAddress).call();
-        const bInt = web3.utils.fromWei(balance.toString(), 'ether');
+        const bInt = web3.utils.fromWei(balance, 'ether');
         console.log('bInt', bInt);
         if (bInt[bInt.length - 1] == '.') {
           bInt.substring(0, bInt.length - 2);
