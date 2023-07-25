@@ -26,7 +26,7 @@ function App() {
       <div className=" overflow-y-auto max-h-full h-full">
         <Routes>
           <Route
-            path="/bridge"
+            path="/"
             element={<Bridge sidebarSubject={sidebarListener} />}
           />
           <Route
