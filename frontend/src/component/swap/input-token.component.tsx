@@ -17,7 +17,7 @@ export const InputToken = () => {
           <input
             type="text"
             placeholder="0"
-            className="bg-transparent text-xl outline-none caret-slate-100 text-slate-100 flex-1"
+            className="bg-transparent text-xl outline-none caret-slate-100 text-slate-100"
           />
           <div className="rounded-full flex flex-row items-center bg-blue-700 p-2 cursor-pointer" onClick={() => setModalVisbleState(true)}>
             <FaEthereum color="white" />
