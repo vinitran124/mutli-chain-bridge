@@ -6,6 +6,7 @@ import { useAppSelector } from "../../hook/store.hook";
 import Web3 from "web3";
 import { Data } from "../../const/data";
 import { Coin } from "../../screen/faunet.screen";
+import { useContract } from "../../hook/contract.hook";
 
 interface Props {
     onCloseModal: () => void;
@@ -14,8 +15,17 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
     const [token, setToken] = useState<Coin | undefined>();
     const [chainId, setCurrentChainId] = useState<string | undefined>()
     const [isOpen, setOpen] = useState(false);
+    const [amount, setAmount] = useState<string | undefined>();
+
     const modalRef = useRef<any>();
-    const walletAddress = useAppSelector(state => state.address)
+    const walletAddress = useAppSelector(state => state.address);
+    const [contractAddress, setContractAddress] = useState<undefined | string>();
+
+    const {addLiquidity} = useContract(contractAddress);
+
+    const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAmount(e.target.value)
+    }
 
     const handleCloseModal = (e: any) => {
         if (modalRef.current === e.terget) {
@@ -35,6 +45,7 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
                 const chainId = await web3.eth.getChainId();
                 setCurrentChainId(chainId.toString());
                 setToken(Data.coin[chainId.toString()][0])
+                setContractAddress(Data.chain.find(chain => chain.chainId == chainId.toString())?.bridgeContractAddress)
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -58,6 +69,14 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
     const onSelectCoin = (coin: Coin) => {
         setToken(coin);
         setOpen(false);
+    }
+
+    const onSubmit = () => {
+        if (!walletAddress || !contractAddress || !token || !amount) {
+            return;
+        }
+
+        addLiquidity(token.address, amount);
     }
 
     return createPortal(
@@ -88,9 +107,9 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
                                 }
                             </div>}
                         </div>
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none " placeholder="0" />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none " placeholder="0" onChange={onChangeAmount}/>
                     </div>
-                    <div className=" w-full bg-orange-600 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg">
+                    <div className=" w-full bg-orange-600 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg cursor-pointer" onClick={onSubmit}>
                         Add liquidity
                     </div>
                 </div>

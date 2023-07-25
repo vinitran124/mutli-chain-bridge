@@ -7,11 +7,11 @@
 -- RETURN NEW;
 -- END;
 -- $TRIGGER$ LANGUAGE plpgsql;
---
+
 -- CREATE TRIGGER trigger_delete_old_bridge_request
 --     AFTER INSERT ON bridge_requests
 --     EXECUTE PROCEDURE delete_old_bridge_request();
---
+
 -- +goose Down
 -- DROP TRIGGER IF EXISTS trigger_delete_old_bridge_request;
 -- DROP FUNCTION IF EXISTS delete_old_bridge_request();

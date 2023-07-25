@@ -1,3 +1,1 @@
-/pgdata
-/redisdata
-.docker-compose.override.yml
+/.env.local

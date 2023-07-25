@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	envPath = ".env"
+	envPath = ".env,.env.local"
 )
 
 func init() {
@@ -42,7 +42,7 @@ func newServerCommand() *cli.Command {
 		Usage: "start the web server",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "addr",
+				Name:  argsAddr,
 				Value: "0.0.0.0:3030",
 				Usage: "serve address",
 			},

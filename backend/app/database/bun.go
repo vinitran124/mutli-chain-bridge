@@ -13,7 +13,7 @@ import (
 const (
 	envDBDataSourcePassword = "POSTGRES_PASSWORD"
 	envDBDataSourceUser     = "POSTGRES_USER"
-	envDBDataSourceHost     = "DB_HOST"
+	envDBDataSourceHost     = "POSTGRES_HOST"
 	envDBDataSourcePort     = "POSTGRES_PORT"
 	envDBDataSourceDB       = "POSTGRES_DB"
 )
