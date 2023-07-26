@@ -10,6 +10,7 @@ import { Data } from '../const/data';
 import { useToken } from '../hook/token.hook';
 import { Coin } from './faunet.screen';
 import Web3 from 'web3';
+import { PropagateLoader } from 'react-spinners';
 
 interface Props {
   sidebarSubject: BehaviorSubject<boolean>
@@ -27,6 +28,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
   const [amountIn, setAmountIn] = useState<string>();
   const [amountOut, setAmountOut] = useState<string>();
   const [balance, setBalance] = useState<string>();
+  const [isLoading, setLoading] = useState(false);
 
   const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer, tokenBalance } = useToken(walletAddress, tokenIn.address);
 
@@ -66,23 +68,23 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
     if (!balance || +amountIn > +balance || !amountOut) {
       return;
     }
-
     return (
-      <div className=" mt-2 w-full py-3 text-center bg-orange-500/90 rounded-xl text-white font-medium text-xl cursor-pointer" onClick={onSwap}>Swap</div>
+      <div className=" mt-2 w-full h-14 py-3 text-center bg-orange-500/90 rounded-xl text-white font-medium text-xl cursor-pointer" onClick={onSwap}>{isLoading ? <PropagateLoader color='white' className=' mt-2' /> : <div>Swap</div>}</div>
     )
   }
 
   const onSwap = async () => {
     const contractTranferAdd = await getTransferContractAdd(tokenIn.address);
     const allowanceAmount = await getAmountCanTranfer(contractTranferAdd as string);
-    if (+(allowanceAmount || 0) < +(amountIn || 0)) {
+    if (+(allowanceAmount || 0) < +(amountIn || 0) || isLoading) {
       await approveAmountTransfer(contractTranferAdd as string)
     }
 
+    setLoading(true);
     if (tokenOut?.name == "VINI") {
-      swapForToken(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string)
+      swapForToken(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(() => setLoading(false)).catch(e => { setLoading(false); })
     } else {
-      swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string)
+      swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(() => setLoading(false)).catch(e => { setLoading(false); })
     }
 
 
@@ -123,7 +125,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
 
     getAmount()
   }, [walletAddress, currentChainId, tokenIn.address, amountIn])
-  { console.log(tokenIn.name, balance, tokenBalance) }
+
   return (
     <div className="w-full h-full items-center justify-center flex bg-slate-900">
       <div className="border-solid border-2 border-stone-500 rounded-2xl self-center w-fit m-0 p-4">

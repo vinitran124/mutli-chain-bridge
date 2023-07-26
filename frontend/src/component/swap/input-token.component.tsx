@@ -33,7 +33,7 @@ export const InputToken = ({ token, setAmount, setCoin, amount, balance, data }:
     <>
       <div className="w-96 bg-slate-800 rounded-xl border-solid border-2 border-slate-700 mt-3">
         <div className="p-4 flex flex-row items-center">
-          {!setAmount ? <div className="bg-transparent text-xl outline-none caret-slate-100 text-slate-100 flex-1">{!amount ? 0 : (+amount)}</div> : <input
+          {!setAmount ? <div className="bg-transparent text-xl outline-none caret-slate-100 text-slate-100 flex-1">{!amount ? 0 : Number(amount).toFixed(6)}</div> : <input
             type="text"
             placeholder="0"
             className="bg-transparent text-xl outline-none caret-slate-100 text-slate-100 flex-1"

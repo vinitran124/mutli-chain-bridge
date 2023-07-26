@@ -10,6 +10,7 @@ import { api } from '../api/api';
 import { useToken } from '../hook/token.hook';
 import { BridgeStatusModal } from '../component/bridge/bridge-status-modal.component';
 import Web3 from 'web3';
+import { PropagateLoader } from 'react-spinners';
 
 interface Props {
   sidebarSubject: BehaviorSubject<boolean>;
@@ -33,6 +34,7 @@ export const Bridge = ({ sidebarSubject }: Props) => {
   const [tokenAvaible, setTokenAvailable] = useState<string | undefined>();
   const [tokenAmountMax, setTokenAmountMax] = useState<string | undefined>();
   const [contractAddress, setContractAddress] = useState<undefined | string>();
+  const [isLoading, setLoading] = useState(false);
 
   const walletAddress = useAppSelector(state => state.address);
   const {
@@ -111,7 +113,7 @@ export const Bridge = ({ sidebarSubject }: Props) => {
   }, [walletAddress, currentChainId, chainIn.chainId, contractAddress, coin]);
 
   const onBridge = async () => {
-    if (!(amount || 0)) {
+    if (!(amount || 0) || isLoading) {
       return;
     }
 
@@ -135,7 +137,11 @@ export const Bridge = ({ sidebarSubject }: Props) => {
         if (res.code == 400) {
           return window.alert(res.message);
         }
-        deposit(coin.address, amount as string);
+        setLoading(true);
+        setAmount(undefined);
+        deposit(coin.address, amount as string).then(res => {
+          setLoading(false)
+        }).catch(e => setLoading(false));
       });
   };
 
@@ -167,10 +173,10 @@ export const Bridge = ({ sidebarSubject }: Props) => {
 
     return (
       <div
-        className=" mt-2 w-full py-3 text-center bg-orange-500/90 rounded-xl text-white font-medium text-xl cursor-pointer"
+        className=" mt-2 w-full h-14 py-3 text-center justify-center bg-orange-500/90 rounded-xl text-white font-medium text-xl cursor-pointer"
         onClick={onBridge}
       >
-        Bridge
+        {isLoading ? <PropagateLoader color='white' className=' mt-2' /> : <div>Bridge</div>}
       </div>
     );
   };

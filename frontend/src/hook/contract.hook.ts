@@ -135,7 +135,7 @@ export const useContract = (
   const deposit = async (tokenAdd: string, amount: string) => {
     if (contract) {
       try {
-        await contract.methods
+        return contract.methods
           .deposit(tokenAdd, web3.utils.toWei(amount, 'ether'))
           .send({ from: walletAddress });
       } catch (error) {
@@ -176,7 +176,7 @@ export const useContract = (
   ) => {
     if (contract) {
       try {
-        await contract.methods
+        return contract.methods
           .swapExactETHForTokens(
             web3.utils.toWei(+amountOut * 0.9, 'ether'),
             [tokenIn, tokenOut],
@@ -201,7 +201,7 @@ export const useContract = (
   ) => {
     if (contract) {
       try {
-        await contract.methods
+        return contract.methods
           .swapExactTokensForETH(
             web3.utils.toWei(+amountIn, 'ether'),
             web3.utils.toWei(+amountOut * 0.9, 'ether'),
