@@ -40,7 +40,7 @@ func main() {
 		for msg := range eventCh {
 			bridgeRq, err := bridgeStr.CheckValidForWithdrawal(ctx, SQLRepository(), msg.Payload)
 			if err != nil {
-				log.Println(err)
+				log.Println("blockchain: ", err)
 				continue
 			}
 

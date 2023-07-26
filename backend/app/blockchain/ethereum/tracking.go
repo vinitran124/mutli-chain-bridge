@@ -31,8 +31,6 @@ func (e *Ethereum) getEvents(msg chan bob.Transaction, contract common.Address) 
 			continue
 		}
 
-		fmt.Println(block)
-
 		txEvent, err := e.eventByBlockNumber(block, contract)
 		if err != nil {
 			fmt.Println(err)
@@ -73,7 +71,6 @@ func (e *Ethereum) eventByBlockNumber(number *big.Int, contracts common.Address)
 	for _, vLog := range logs {
 		switch vLog.Topics[0].Hex() {
 		case depositEventHash:
-			fmt.Println(vLog)
 			if len(vLog.Topics) < 3 {
 				continue
 			}
