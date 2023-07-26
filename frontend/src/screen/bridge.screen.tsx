@@ -42,10 +42,10 @@ export const Bridge = ({ sidebarSubject }: Props) => {
     getTransferContractAdd,
     deposit,
     contract
-  } = useContract(contractAddress);
+  } = useContract(walletAddress, contractAddress);
 
   const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer, tokenBalance } =
-    useToken(coin.address);
+    useToken(walletAddress, coin.address);
 
   useEffect(() => {
     document.title = "Bridge"
@@ -87,9 +87,9 @@ export const Bridge = ({ sidebarSubject }: Props) => {
   const getTokenAmount = () => {
     if (
       !contractAddress ||
-      !walletAddress ||
       currentChainId?.toString() != chainIn.chainId
     ) {
+
       setTokenAmountMax(undefined);
       setTokenAvailable(undefined);
       return;
@@ -105,6 +105,7 @@ export const Bridge = ({ sidebarSubject }: Props) => {
       clearTimeout(timeout)
     }, 3000)
   };
+
   useEffect(() => {
     getTokenAmount();
   }, [walletAddress, currentChainId, chainIn.chainId, contractAddress, coin]);
@@ -237,18 +238,18 @@ export const Bridge = ({ sidebarSubject }: Props) => {
           </div>
           {(tokenAmountMax && coin.name != "VINI") && (
             <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
-              Balance: {tokenAmountMax}
+              Balance: {Number(tokenAmountMax).toFixed(6)}
             </div>
           )}
           {(tokenBalance && coin.name == "VINI") && (
             <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
-              Balance: {tokenBalance}
+              Balance: {Number(tokenBalance).toFixed(6)}
             </div>
           )}
         </div>
         {tokenAvaible && (
           <div className=" w-full text-right text-slate-300 pr-4 mt-2">
-            Token available in Pool: {tokenAvaible}
+            Token available in Pool: {Number(tokenAvaible).toFixed(6)}
           </div>
         )}
         {getSubmitButton()}

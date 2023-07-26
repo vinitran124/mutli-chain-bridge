@@ -1,13 +1,15 @@
 // @ts-nocheck
-import { useAppSelector } from './store.hook';
 import tAbi from '../const/token.json';
 import Web3, { Contract } from 'web3';
 import { useEffect, useState } from 'react';
 
-export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
+export const useToken = (
+  walletAddress: string,
+  contractAddress: any,
+  tokenAbi: any = tAbi.abi,
+) => {
   const [contract, setContract] = useState<Contract<any> | undefined>();
   const [tokenBalance, setTokenBalance] = useState<string>();
-  const walletAddress = useAppSelector(state => state.address);
 
   const initializeContract = async () => {
     console.log('init token', contractAddress, walletAddress);
@@ -49,11 +51,11 @@ export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
   }, [contract]);
 
   const getWalletTokenAmount = async () => {
-    console.error('get token', contract, contractAddress);
     if (contract) {
       try {
         const web3 = new Web3(window.ethereum);
         const balance = await contract.methods.balanceOf(walletAddress).call();
+        console.log('walletAddress', contractAddress, walletAddress, balance);
         const bInt = web3.utils.fromWei(balance, 'ether');
         setTokenBalance(bInt);
         return bInt;

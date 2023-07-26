@@ -51,7 +51,7 @@ const coin: {
     {
       name: 'XSR',
       address: '0x0000000000000000000000000000000000000000',
-      icon: 'https://cryptologos.cc/logos/xensor-xsr-logo.png',
+      icon: 'https://testnet.cvcscan.com/images/favicon-32x32-c8479ca561589b59867e59143bfe63a5.png?vsn=d',
     },
   ],
 };

@@ -21,14 +21,14 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
   });
 
   const walletAddress = useAppSelector(state => state.address);
-  const { currentChainId, changeNetwork, getAmountSwap, getTransferContractAdd, swapForToken, swapForCoin } = useContract('0xf988aa295bc1feddbcf4c567e855945d1c6a0619', SwapAbi.abi);
+  const { currentChainId, changeNetwork, getAmountSwap, getTransferContractAdd, swapForToken, swapForCoin } = useContract(walletAddress, '0xf988aa295bc1feddbcf4c567e855945d1c6a0619', SwapAbi.abi);
   const [tokenIn, setTokenIn] = useState(data[1]);
   const [tokenOut, setTokenOut] = useState<Coin>();
   const [amountIn, setAmountIn] = useState<string>();
   const [amountOut, setAmountOut] = useState<string>();
   const [balance, setBalance] = useState<string>();
 
-  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer } = useToken(tokenIn.address);
+  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer, tokenBalance } = useToken(walletAddress, tokenIn.address);
 
   useEffect(() => {
     document.title = "Swap"
@@ -94,7 +94,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
         const web3 = new Web3(window.ethereum);
         web3.eth.getBalance(walletAddress).then(balance => setBalance(web3.utils.fromWei(balance, 'ether')))
       } else {
-        getWalletTokenAmount().then(balance => setBalance(balance));
+        //getWalletTokenAmount().then(balance => setBalance(balance));
       }
       clearTimeout(timeout)
     }, 3000)
@@ -123,11 +123,11 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
 
     getAmount()
   }, [walletAddress, currentChainId, tokenIn.address, amountIn])
-
+  { console.log(tokenIn.name, balance, tokenBalance) }
   return (
     <div className="w-full h-full items-center justify-center flex bg-slate-900">
       <div className="border-solid border-2 border-stone-500 rounded-2xl self-center w-fit m-0 p-4">
-        <InputToken token={tokenIn} setCoin={setTokenIn} amount={amountIn} setAmount={setAmountIn} balance={balance} data={data} />
+        <InputToken token={tokenIn} setCoin={setTokenIn} amount={amountIn} setAmount={setAmountIn} balance={tokenIn.name != "VINI" ? balance : tokenBalance} data={data} />
         <div className="w-full items-center flex justify-center">
           <div className=" p-1 items-center justify-center mt-3 bg-gray-800 w-fit rounded-lg">
             <CgArrowsExchangeAltV color="white" className="w-8 h-8" />

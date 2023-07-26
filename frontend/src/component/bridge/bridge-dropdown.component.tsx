@@ -29,7 +29,7 @@ export const BridgeDropdown = ({ value, options, onPress }: Props) => {
                 <RxTriangleDown color="white" />
             </div>
             {
-                isOpen && <div className=" absolute w-[20rem] rounded border border-slate-400 bg-slate-700 max-h-48 overflow-y-scroll cursor-pointer">
+                isOpen && <div className=" absolute w-[20rem] rounded border border-slate-400 bg-slate-700 max-h-48 overflow-y-scroll cursor-pointer z-50">
                     {
                         options.map(chain => {
                             return (

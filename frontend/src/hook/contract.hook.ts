@@ -1,22 +1,19 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
 import Web3, { Contract } from 'web3';
-import Abi from '../const/token.json';
 import { Chain } from '../screen/bridge.screen';
-import { useAppSelector } from './store.hook';
 import BridgeRouterAbi from '../const/bridgerouter.json';
 
 export const useContract = (
+  walletAddress: string,
   contractAddress: any,
   contractAbi: any = BridgeRouterAbi.abi,
 ) => {
   const [contract, setContract] = useState<Contract<any> | undefined>();
   const [currentChainId, setCurrentChainId] = useState<bigint | undefined>();
-  const walletAddress = useAppSelector(state => state.address);
   const web3 = new Web3(window.ethereum);
 
   const initializeContract = async () => {
-    console.log('contract', contractAddress);
     if (!walletAddress || !contractAddress) {
       return;
     }
@@ -52,12 +49,13 @@ export const useContract = (
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on('chainChanged', () => {
-        initializeContract();
+        console.log('on change network');
         getChainId();
+        initializeContract();
       });
       window.ethereum.on('accountsChanged', () => {
-        initializeContract();
         getChainId();
+        initializeContract();
       });
     }
   }, []);
@@ -92,22 +90,14 @@ export const useContract = (
   };
 
   const getChainId = async () => {
-    if (!walletAddress) {
-      return;
-    }
+    try {
+      const web3 = new Web3(window.ethereum);
 
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web3 = new Web3(window.ethereum);
-
-        const chainId = await web3.eth.getChainId();
-        console.log('current chain id', chainId);
-        setCurrentChainId(chainId);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    } else {
-      console.error('Metamask not found.');
+      const chainId = await web3.eth.getChainId();
+      console.log('current chain id', chainId);
+      setCurrentChainId(chainId);
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -118,11 +108,6 @@ export const useContract = (
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: web3.utils.toHex(BigInt(chain.chainId)) }],
-        });
-
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: web3.utils.toHex(chain.chainId) }],
         });
       } catch (error) {
         console.error(error);

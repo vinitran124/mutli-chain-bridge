@@ -4,8 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../hook/store.hook"
 import { useEffect, useState } from "react"
 import { setWalletAddress } from "../../store/wallet.slice"
 import detectEthereumProvider from "@metamask/detect-provider"
-import { useWeb3React } from "@web3-react/core"
-import { useContract } from "../../hook/contract.hook"
 
 interface HeaderProps {
     sidebarSubject: BehaviorSubject<boolean>

@@ -22,7 +22,7 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
     const walletAddress = useAppSelector(state => state.address);
     const [contractAddress, setContractAddress] = useState<undefined | string>();
 
-    const { addLiquidity } = useContract(contractAddress);
+    const { addLiquidity } = useContract(walletAddress, contractAddress);
 
     const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(e.target.value)

@@ -67,7 +67,7 @@ export const InputToken = ({ token, setAmount, setCoin, amount, balance, data }:
             }
           </div>
         </div>
-        {balance && <div className=" text-slate-400 mr-10 pr-4 mb-2 w-full text-right">Balance: {balance}</div>}
+        {balance && <div className=" text-slate-400 mr-10 pr-4 mb-2 w-full text-right">Balance: {Number(balance).toFixed(6)}</div>}
       </div>
     </>
   );
