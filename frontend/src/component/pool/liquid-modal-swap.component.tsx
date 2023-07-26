@@ -136,8 +136,8 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
                                 }
                             </div>}
                         </div>
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none mr-2 " placeholder="Amount Desired" onChange={onChangeAmount} />
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none " placeholder="Amount Min" onChange={onChangeAmountMin} />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none mr-2 text-white " placeholder="Amount Desired" onChange={onChangeAmount} />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none text-white " placeholder="Amount Min" onChange={onChangeAmountMin} />
                     </div>
                     <div className=" flex flex-row items-center mt-3">
                         <div className=" relative">
@@ -164,8 +164,8 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
                                 }
                             </div>}
                         </div>
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none mr-2 " placeholder="Amount Desired" onChange={onChangeAmount2} />
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none " placeholder="Amount Min" onChange={onChangeAmountMin2} />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none mr-2 text-white " placeholder="Amount Desired" onChange={onChangeAmount2} />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none text-white" placeholder="Amount Min" onChange={onChangeAmountMin2} />
                     </div>
                     <div className=" flex flex-row justify-between">
 

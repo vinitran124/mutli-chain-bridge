@@ -114,7 +114,7 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
                                 }
                             </div>}
                         </div>
-                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none " placeholder="0" onChange={onChangeAmount} />
+                        <input className=" rounded-xl bg-slate-800 px-3 py-3 flex-1 w-64 caret-slate-100 outline-none text-white " placeholder="0" onChange={onChangeAmount} />
                     </div>
                     <div className=" flex flex-row justify-between">
 
