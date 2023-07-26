@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { useAppSelector } from '../hook/store.hook';
 import { useEffect, useState } from 'react';
 import { LiquidModal } from '../component/pool/liquid-modal.component';
+import { LiquidModalSwap } from '../component/pool/liquid-modal-swap.component';
 
 interface Props {
     sidebarSubject: BehaviorSubject<boolean>
@@ -11,6 +12,7 @@ interface Props {
 export const PoolScreen = ({ sidebarSubject }: Props) => {
     const walletAddress = useAppSelector(state => state.address);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleSwap, setModalVisibleSwap] = useState(false);
 
     useEffect(() => {
         document.title = "Pools"
@@ -30,9 +32,14 @@ export const PoolScreen = ({ sidebarSubject }: Props) => {
         }
 
         return (
-            <div className='flex px-16   py-3 bg-orange-600 rounded-full my-4 font-normal text-white text-xl cursor-pointer' onClick={() => setModalVisible(true)}>
-                Add liquidity
-            </div>
+            <>
+                <div className='flex px-16   py-3 bg-orange-600 rounded-full my-4 font-normal text-white text-xl cursor-pointer' onClick={() => setModalVisible(true)}>
+                    Add liquidity in Bridge
+                </div>
+                <div className='flex px-16   py-3 bg-orange-600 rounded-full my-4 font-normal text-white text-xl cursor-pointer' onClick={() => setModalVisibleSwap(true)}>
+                    Add liquidity in Swap
+                </div>
+            </>
         )
     }
 
@@ -47,6 +54,9 @@ export const PoolScreen = ({ sidebarSubject }: Props) => {
             </div>
             {
                 modalVisible && <LiquidModal onCloseModal={() => setModalVisible(false)} />
+            }
+            {
+                modalVisibleSwap && <LiquidModalSwap onCloseModal={() => setModalVisibleSwap(false)} />
             }
         </div >
     )

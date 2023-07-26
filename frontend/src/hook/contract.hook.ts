@@ -217,11 +217,40 @@ export const useContract = (
       }
     }
   };
+
   const addLiquidity = async (tokenAdd: string, amount: string) => {
     if (contract) {
       try {
-        await contract.methods
+        return contract.methods
           .addLiquidity(tokenAdd, web3.utils.toWei(amount, 'ether'))
+          .send({ from: walletAddress });
+      } catch (error) {
+        console.error('Error in deposit:', error, tokenAdd, amount);
+      }
+    }
+  };
+
+  const addLiquiditySwap = async (
+    tokenA: string,
+    tokenB: string,
+    amountDisiredA: string,
+    amountDisiredB: string,
+    amountMinA: string,
+    amountMinB: string,
+  ) => {
+    if (contract) {
+      try {
+        return contract.methods
+          .addLiquidity(
+            tokenA,
+            tokenB,
+            web3.utils.toWei(amountDisiredA, 'ether'),
+            web3.utils.toWei(amountDisiredB, 'ether'),
+            web3.utils.toWei(amountMinA, 'ether'),
+            web3.utils.toWei(amountMinB, 'ether'),
+            walletAddress,
+            Date.now() + 3000,
+          )
           .send({ from: walletAddress });
       } catch (error) {
         console.error('Error in deposit:', error, tokenAdd, amount);
@@ -241,5 +270,6 @@ export const useContract = (
     swapForCoin,
     addLiquidity,
     contract,
+    addLiquiditySwap,
   };
 };
