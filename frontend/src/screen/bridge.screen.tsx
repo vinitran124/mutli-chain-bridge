@@ -41,9 +41,15 @@ export const Bridge = ({ sidebarSubject }: Props) => {
     getTokenAvailableInPool,
     getTransferContractAdd,
     deposit,
+    contract
   } = useContract(contractAddress);
-  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer } =
+
+  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer, tokenBalance } =
     useToken(coin.address);
+
+  useEffect(() => {
+    document.title = "Bridge"
+  })
 
   useEffect(() => {
     if (currentChainId?.toString() != chainIn.chainId) {
@@ -56,6 +62,19 @@ export const Bridge = ({ sidebarSubject }: Props) => {
   useEffect(() => {
     getTokenAmount()
   }, [walletAddress, currentChainId, chainIn.chainId])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!!tokenAvaible) {
+        clearInterval(interval)
+      }
+      if (!!contract) {
+        getTokenAvailableInPool(coin.address).then(amount => setTokenAvailable(amount));
+        clearInterval(interval);
+      }
+    }, 1000)
+  })
+
   useEffect(() => {
     setCoin(Data.coin[chainIn.chainId][0]);
   }, [chainIn.chainId]);
@@ -80,14 +99,15 @@ export const Bridge = ({ sidebarSubject }: Props) => {
       getTokenAvailableInPool(coin.address).then(amount => setTokenAvailable(amount));
       if (coin.name != "VINI") {
         web3.eth.getBalance(walletAddress).then(balance => setTokenAmountMax(web3.utils.fromWei(balance, 'ether')))
+      } else {
+        getWalletTokenAmount().then(amount => setTokenAmountMax(amount));
       }
-      getWalletTokenAmount().then(amount => setTokenAmountMax(amount));
       clearTimeout(timeout)
     }, 3000)
   };
   useEffect(() => {
     getTokenAmount();
-  }, [walletAddress, currentChainId, chainIn.chainId]);
+  }, [walletAddress, currentChainId, chainIn.chainId, contractAddress, coin]);
 
   const onBridge = async () => {
     if (!(amount || 0)) {
@@ -215,9 +235,14 @@ export const Bridge = ({ sidebarSubject }: Props) => {
               )}
             </div>
           </div>
-          {tokenAmountMax && (
+          {(tokenAmountMax && coin.name != "VINI") && (
             <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
               Balance: {tokenAmountMax}
+            </div>
+          )}
+          {(tokenBalance && coin.name == "VINI") && (
+            <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
+              Balance: {tokenBalance}
             </div>
           )}
         </div>

@@ -11,11 +11,6 @@ import { useToken } from '../hook/token.hook';
 import { Coin } from './faunet.screen';
 import Web3 from 'web3';
 
-enum SwapFunction {
-  SWAP,
-  BUY
-}
-
 interface Props {
   sidebarSubject: BehaviorSubject<boolean>
 }
@@ -33,7 +28,11 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
   const [amountOut, setAmountOut] = useState<string>();
   const [balance, setBalance] = useState<string>();
 
-  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer } = useToken(tokenIn.address)
+  const { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer } = useToken(tokenIn.address);
+
+  useEffect(() => {
+    document.title = "Swap"
+  })
 
   const changeCurrentNetwork = () => {
     changeNetwork(Data.chain[1]);
@@ -81,11 +80,11 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
     }
 
     if (tokenOut?.name == "VINI") {
-
       swapForToken(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string)
+    } else {
+      swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string)
     }
 
-    swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string)
 
   }
 
@@ -103,7 +102,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
 
   const getAmount = () => {
     const timeout = setTimeout(() => {
-      getAmountSwap(amountIn as string, tokenIn.address, tokenOut?.address as string).then(amount => { setAmountOut(amount); console.log('amount', amount) })
+      getAmountSwap(amountIn as string, tokenIn.address, tokenOut?.address as string).then(amount => { setAmountOut(amount); })
 
       clearTimeout(timeout)
     }, 3000)

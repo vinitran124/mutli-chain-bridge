@@ -47,7 +47,7 @@ export const useContract = (
   useEffect(() => {
     initializeContract();
     getChainId();
-  }, [contractAbi, contractAddress]);
+  }, [contractAbi, contractAddress, walletAddress]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -66,13 +66,12 @@ export const useContract = (
     if (contract) {
       try {
         const web3 = new Web3(window.ethereum);
-        console.log('tokenAdd', tokenAddress);
         const balance = await contract.methods
           .getAmountTokenInPool(tokenAddress)
           .call();
 
-        console.log(contractAddress);
         const bInt = web3.utils.fromWei(balance, 'ether');
+        console.log('token in pool', bInt);
         return bInt;
       } catch (error) {
         console.error('Error checking token balance:', error);
@@ -102,6 +101,7 @@ export const useContract = (
         const web3 = new Web3(window.ethereum);
 
         const chainId = await web3.eth.getChainId();
+        console.log('current chain id', chainId);
         setCurrentChainId(chainId);
       } catch (error) {
         console.error('Error:', error);
@@ -141,7 +141,6 @@ export const useContract = (
           )
           .send({ from: '0x06D74c06196a814F56d552aF83F893689e5e7eF8' });
         const bInt = web3.utils.fromWei(balance, 'ether');
-        console.log('Token balance:', balance, bInt);
       } catch (error) {
         console.error('Error checking token balance:', error);
       }
@@ -233,7 +232,7 @@ export const useContract = (
       }
     }
   };
-  const addLiquidity =async (tokenAdd:string, amount: string) => {
+  const addLiquidity = async (tokenAdd: string, amount: string) => {
     if (contract) {
       try {
         await contract.methods
@@ -243,7 +242,7 @@ export const useContract = (
         console.error('Error in deposit:', error, tokenAdd, amount);
       }
     }
-  }
+  };
 
   return {
     getTokenAvailableInPool,
@@ -255,6 +254,7 @@ export const useContract = (
     getAmountSwap,
     swapForToken,
     swapForCoin,
-    addLiquidity
+    addLiquidity,
+    contract,
   };
 };

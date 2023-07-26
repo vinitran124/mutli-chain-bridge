@@ -9,7 +9,7 @@ import { Chain } from "./bridge.screen";
 export interface Coin {
     name: string;
     address: string;
-
+    icon: string;
 }
 
 export const FaunetScreen = () => {
@@ -18,6 +18,10 @@ export const FaunetScreen = () => {
     const [isOpenCoin, setOpenCoin] = useState(false);
     const [isOpenChain, setOpenChain] = useState(false);
     const [address, setAddress] = useState<string>();
+
+    useEffect(() => {
+        document.title = "Faucet"
+    })
 
     const onChangeAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAddress(e.target.value)
@@ -74,8 +78,9 @@ export const FaunetScreen = () => {
                     </div>
                 </div>
                 <div className="relative">
-                    <div className=" flex flex-row items-center rounded-lg bg-slate-800 h-12 mr-3 px-3 cursor-pointer w-20" onClick={() => setOpenCoin(!isOpenCoin)}>
-                        <div className=" text-white text-lg mr-2">{token?.name}</div>
+                    <div className=" flex flex-row items-center rounded-lg bg-slate-800 h-12 mr-3 px-3 cursor-pointer w-28" onClick={() => setOpenCoin(!isOpenCoin)}>
+                        <img src={token.icon} className=" w-6 h-6 rounded-full  mr-1" />
+                        <div className=" text-white text-lg mr-2">{token.name}</div>
                         {(isOpenCoin) ? <BsChevronUp color="white" /> : <BsChevronDown color="white" />}
 
                     </div>
@@ -84,7 +89,8 @@ export const FaunetScreen = () => {
                             {
                                 Data.coin[chain.chainId].map((coin) => {
                                     return (
-                                        <div className=" flex flex-row items-center bg-slate-800 h-12 px-3 cursor-pointer w-20" onClick={() => onSelectCoin(coin)}>
+                                        <div className=" flex flex-row items-center bg-slate-800 h-12 px-3 cursor-pointer w-28" onClick={() => onSelectCoin(coin)}>
+                                            <img src={coin.icon} className=" w-6 h-6 rounded-full  mr-1" />
                                             <div className=" text-white text-lg mr-6">{coin.name}</div>
                                         </div>
                                     )

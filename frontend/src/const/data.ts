@@ -1,3 +1,5 @@
+import { icons } from 'react-icons/lib';
+
 const chain = [
   {
     chainId: '97',
@@ -13,35 +15,43 @@ const chain = [
   },
 ];
 
-const coin: { [key: string]: { name: string; address: string }[] } = {
+const coin: {
+  [key: string]: { name: string; address: string; icon: string }[];
+} = {
   '97': [
     {
       name: 'VINI',
       address: '0x32D7eEE6513224f459D221BfED0C3af45343CbB7',
+      icon: 'https://icon-library.com/images/v-icon/v-icon-11.jpg',
     },
     {
       name: 'BNB',
       address: '0x0000000000000000000000000000000000000000',
+      icon: 'https://w7.pngwing.com/pngs/997/942/png-transparent-bnb-crypto-cryptocurrency-cryptocurrencies-cash-money-bank-payment-icon.png',
     },
   ],
   '5': [
     {
       name: 'VINI',
       address: '',
+      icon: 'https://icon-library.com/images/v-icon/v-icon-11.jpg',
     },
     {
       name: 'ETH',
       address: '0x0000000000000000000000000000000000000000',
+      icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/512/Ethereum-ETH-icon.png',
     },
   ],
   '5555': [
     {
       name: 'VINI',
       address: '0x596c14ba2b6e759c73895ce13e64e49054181a7f',
+      icon: 'https://icon-library.com/images/v-icon/v-icon-11.jpg',
     },
     {
       name: 'XSR',
       address: '0x0000000000000000000000000000000000000000',
+      icon: 'https://cryptologos.cc/logos/xensor-xsr-logo.png',
     },
   ],
 };

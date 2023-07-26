@@ -52,7 +52,7 @@ export const Header = ({ sidebarSubject }: HeaderProps) => {
     return (
         <div className="flex flex-row flex-1 items-center justify-between fixed top-0 left-0 w-full bg-slate-800 py-5">
             <div className="flex flex-row px-6">
-                <Link to={'/bridge'} className="text-white font-medium text-xl mr-6">Bridge</Link>
+                <Link to={'/'} className="text-white font-medium text-xl mr-6">Bridge</Link>
                 <Link to={'/swap'} className="text-white font-medium text-xl mr-6">Swap</Link>
                 <Link to={'/tokens'} className="text-white font-medium text-xl mr-6">Tokens</Link>
                 <Link to={'/pool'} className="text-white font-medium text-xl mr-6">Pool</Link>

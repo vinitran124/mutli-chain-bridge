@@ -1,7 +1,7 @@
 import { IoFileTrayOutline } from 'react-icons/io5'
 import { BehaviorSubject } from 'rxjs';
 import { useAppSelector } from '../hook/store.hook';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LiquidModal } from '../component/pool/liquid-modal.component';
 
 interface Props {
@@ -11,6 +11,10 @@ interface Props {
 export const PoolScreen = ({ sidebarSubject }: Props) => {
     const walletAddress = useAppSelector(state => state.address);
     const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        document.title = "Pools"
+    })
 
     const onOpenWallet = () => {
         sidebarSubject.next(true)

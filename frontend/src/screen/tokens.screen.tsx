@@ -29,7 +29,10 @@ export const Token = () => {
     }
 
     useEffect(() => {
-        console.log('time value', timeValue)
+        document.title = "Tokens"
+    })
+
+    useEffect(() => {
         getData();
     }, [timeValue])
 

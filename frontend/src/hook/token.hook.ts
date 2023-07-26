@@ -6,26 +6,29 @@ import { useEffect, useState } from 'react';
 
 export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
   const [contract, setContract] = useState<Contract<any> | undefined>();
-
+  const [tokenBalance, setTokenBalance] = useState<string>();
   const walletAddress = useAppSelector(state => state.address);
 
   const initializeContract = async () => {
+    console.log('init token', contractAddress, walletAddress);
     if (!walletAddress || !contractAddress) {
       return;
     }
-
     // Check if Web3 is injected by MetaMask or any other Ethereum provider
     if (window.ethereum) {
       // Initialize Web3 with the current provider
       const web3 = new Web3(window.ethereum);
       try {
         // Request access to user accounts if needed
-        await window.ethereum.enable();
+        await window.ethereum?.request({
+          /* New */ method: 'eth_requestAccounts' /* New */,
+        });
         // Access the connected network ID
         const networkId = await web3.eth.net.getId();
 
         // Use the network ID to create an instance of the ERC20 contract
         const erc20Contract = new web3.eth.Contract(tokenAbi, contractAddress);
+        console.log('init contract', erc20Contract);
         // Set the contract instance in the context
         setContract(erc20Contract);
         console.log('Connected to ERC20 network:', networkId);
@@ -39,19 +42,20 @@ export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
 
   useEffect(() => {
     initializeContract();
-  }, [tokenAbi, contractAddress]);
+  }, [tokenAbi, contractAddress, walletAddress]);
+
+  useEffect(() => {
+    getWalletTokenAmount();
+  }, [contract]);
 
   const getWalletTokenAmount = async () => {
+    console.error('get token', contract, contractAddress);
     if (contract) {
       try {
         const web3 = new Web3(window.ethereum);
         const balance = await contract.methods.balanceOf(walletAddress).call();
         const bInt = web3.utils.fromWei(balance, 'ether');
-        console.log('bInt', bInt);
-        if (bInt[bInt.length - 1] == '.') {
-          bInt.substring(0, bInt.length - 2);
-        }
-
+        setTokenBalance(bInt);
         return bInt;
       } catch (error) {
         console.error('Error checking token balance:', error);
@@ -92,5 +96,10 @@ export const useToken = (contractAddress: any, tokenAbi: any = tAbi.abi) => {
     }
   };
 
-  return { getWalletTokenAmount, getAmountCanTranfer, approveAmountTransfer };
+  return {
+    getWalletTokenAmount,
+    getAmountCanTranfer,
+    approveAmountTransfer,
+    tokenBalance,
+  };
 };

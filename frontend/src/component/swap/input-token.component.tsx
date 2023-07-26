@@ -43,15 +43,19 @@ export const InputToken = ({ token, setAmount, setCoin, amount, balance, data }:
           />}
           <div className=" relative">
             <div className="rounded-full flex flex-row items-center bg-orange-600 p-2 cursor-pointer text-white font-medium" onClick={() => setModalVisbleState(!modalVisble)}>
-              <div className="">{token?.name ? token.name : 'Select token'}</div>
+              {
+                token?.name ? <>
+                  <img src={token.icon} className=" w-6 h-6 rounded-full mr-2" /><div>{token.name}</div></> : <div>Select token</div>
+              }
               {modalVisble ? <BsChevronUp color="white" /> : <BsChevronDown color="white" />}
             </div>
             {
-              modalVisble && <div className=" absolute left-1/2 -translate-x-1/2 w-20 rounded border border-slate-400 bg-slate-700 max-h-48 overflow-y-scroll cursor-pointer z-50">
+              modalVisble && <div className=" absolute left-1/2 -translate-x-1/2 w-28 rounded-lg border border-slate-400 bg-slate-700 max-h-48 overflow-y-scroll cursor-pointer z-50">
                 {
                   data.map(chain => {
                     return (
                       <div className=" flex flex-row items-center px-3 py-4 cursor-pointer" onClick={() => onSelectCoin(chain)}>
+                        <img src={chain.icon} className=" w-6 h-6 rounded-full mr-2" />
                         <p className=" ml-2 font-medium text-lg text-white">
                           {chain.name}
                         </p>
