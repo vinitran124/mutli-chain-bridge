@@ -38,6 +38,6 @@ func main() {
 			log.Println(err)
 			continue
 		}
-		time.Sleep(10 * time.Second)
+		time.Sleep(10 * time.Minute)
 	}
 }
