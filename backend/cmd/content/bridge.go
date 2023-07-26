@@ -27,8 +27,10 @@ func (v *V1Router) bridge(c *gin.Context) {
 		return
 	}
 
-	log.Println("token", auth.TokenAddress)
-	log.Println("token chain", auth.InChain)
+	if auth.OutChain == auth.InChain {
+		responseFailureWithMessage(c, "invalid input and output chainId")
+		return
+	}
 
 	tokenIn, err := bob.Tokens(
 		ctx,
@@ -36,7 +38,6 @@ func (v *V1Router) bridge(c *gin.Context) {
 		bob.SelectWhere.Tokens.Address.EQ(auth.TokenAddress),
 		bob.SelectWhere.Tokens.ChainID.EQ(auth.InChain)).One()
 	if err != nil {
-		log.Println("asb", err)
 		responseFailureWithMessage(c, "invalid input token")
 		return
 	}
@@ -47,7 +48,6 @@ func (v *V1Router) bridge(c *gin.Context) {
 		bob.SelectWhere.Tokens.Name.EQ(tokenIn.Name),
 		bob.SelectWhere.Tokens.ChainID.EQ(auth.OutChain)).One()
 	if err != nil {
-		log.Println("asb1")
 		responseFailureWithMessage(c, "invalid output token")
 		return
 	}
@@ -57,12 +57,9 @@ func (v *V1Router) bridge(c *gin.Context) {
 		responseErrInternalServerError(c)
 		return
 	}
-	log.Println(amountInPoolTokenOut.String())
-	log.Println(auth.Amount)
 
 	amountIn, ok := big.NewInt(0).SetString(auth.Amount, 10)
 	if !ok {
-		log.Println("abcas", err)
 		responseErrInternalServerError(c)
 		return
 	}
