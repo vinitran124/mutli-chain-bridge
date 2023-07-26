@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"math/big"
+	"strings"
 )
 
 type BridgeRequest struct {
@@ -83,8 +84,8 @@ func (v *V1Router) bridge(c *gin.Context) {
 		InputChain:  auth.InChain,
 		OutputChain: auth.OutChain,
 		RawAmount:   auth.Amount,
-		Token:       auth.TokenAddress,
-		UserAddress: auth.UserAddress,
+		Token:       strings.ToLower(auth.TokenAddress),
+		UserAddress: strings.ToLower(auth.UserAddress),
 	})
 	if err != nil {
 		log.Println(err)
