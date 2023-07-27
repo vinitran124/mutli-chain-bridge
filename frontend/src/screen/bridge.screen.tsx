@@ -68,7 +68,8 @@ export const Bridge = ({ sidebarSubject }: Props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!!tokenAvaible) {
+      if (Number(tokenAvaible) > 0) {
+        getTokenAvailableInPool(coin.address).then(amount => setTokenAvailable(amount));
         clearInterval(interval)
       }
       if (!!contract) {
@@ -138,12 +139,14 @@ export const Bridge = ({ sidebarSubject }: Props) => {
         if (res.data.code == 400) {
           notify(res.data.message, 'error');
           return;
+        } else {
+
+          setLoading(true);
+          deposit(coin.address, amount as string).then(res => {
+            setLoading(false)
+            notify('Transaction Success', 'success')
+          }).catch(e => { setLoading(false); notify('Transaction Error', 'error') });
         }
-        setLoading(true);
-        deposit(coin.address, amount as string).then(res => {
-          setLoading(false)
-          notify('Transaction Success', 'success')
-        }).catch(e => { setLoading(false); notify('Transaction Error', 'error') });
       });
   };
 
