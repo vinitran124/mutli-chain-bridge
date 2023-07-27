@@ -9,6 +9,7 @@ import { Coin } from "../../screen/faunet.screen";
 import { useContract } from "../../hook/contract.hook";
 import { IoMdClose } from "react-icons/io";
 import { notify } from "../../service/noti.service";
+import { PropagateLoader } from "react-spinners";
 
 interface Props {
     onCloseModal: () => void;
@@ -18,6 +19,7 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
     const [chainId, setCurrentChainId] = useState<string | undefined>()
     const [isOpen, setOpen] = useState(false);
     const [amount, setAmount] = useState<string | undefined>();
+    const [isLoading, setLoading] = useState(false)
 
     const modalRef = useRef<any>();
     const walletAddress = useAppSelector(state => state.address);
@@ -72,11 +74,11 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
     }
 
     const onSubmit = () => {
-        if (!walletAddress || !contractAddress || !token || !amount) {
+        if (!walletAddress || !contractAddress || !token || !amount || isLoading) {
             return;
         }
-
-        addLiquidity(token.address, amount).then(() => { onCloseModal(); notify('Transaction Success', 'success') }).catch(e => notify('Transaction Error', 'error'));
+        setLoading(true);
+        addLiquidity(token.address, amount, token.name == "VINI" ? true : false).then(() => { onCloseModal(); notify('Transaction Success', 'success'); setLoading(false) }).catch(e => { notify('Transaction Error', 'error'); setLoading(false) });
     }
 
     return createPortal(
@@ -132,8 +134,8 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
                             <div className=" font-normal text-green-600"> 4.5%</div>
                         </div>
                     </div>
-                    <div className=" w-full bg-orange-600 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg cursor-pointer" onClick={onSubmit}>
-                        Add liquidity
+                    <div className=" w-full bg-orange-600 h-14 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg cursor-pointer" onClick={onSubmit}>
+                        {isLoading ? <PropagateLoader color="white" className=" mt-2" /> : <div>Add liquidity</div>}
                     </div>
                 </div>
             </div>

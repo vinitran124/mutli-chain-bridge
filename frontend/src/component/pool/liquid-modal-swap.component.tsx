@@ -10,6 +10,7 @@ import { useContract } from "../../hook/contract.hook";
 import { IoMdClose } from "react-icons/io";
 import Swap from '../../const/swap.json'
 import { notify } from "../../service/noti.service";
+import { PropagateLoader } from "react-spinners";
 
 interface Props {
     onCloseModal: () => void;
@@ -24,6 +25,7 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
     const [amount2, setAmount2] = useState<string | undefined>();
     const [amountMin, setAmountMin] = useState<string | undefined>();
     const [amountMin2, setAmountMin2] = useState<string | undefined>();
+    const [isLoading, setLoading] = useState(false)
 
     const modalRef = useRef<any>();
     const walletAddress = useAppSelector(state => state.address);
@@ -96,11 +98,11 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
     }
 
     const onSubmit = () => {
-        if (!walletAddress || !contractAddress || !token || !amount || !token2 || !amount2 || !amountMin || !amountMin2) {
+        if (!walletAddress || !contractAddress || !token || !amount || !token2 || !amount2 || !amountMin || !amountMin2 || isLoading) {
             return;
         }
-
-        addLiquiditySwap(token.address, token2?.address, amount, amount2, amountMin, amountMin2).then(() => { onCloseModal(); notify('Transaction Success', 'success') }).catch(e => notify('Transaction Error', 'error'));
+        setLoading(true)
+        addLiquiditySwap(token.address, token2?.address, amount, amount2, amountMin, amountMin2).then(() => { onCloseModal(); notify('Transaction Success', 'success'); setLoading(false) }).catch(e => { notify('Transaction Error', 'error'); setLoading(false) });
     }
 
     return createPortal(
@@ -183,8 +185,8 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
                             <div className=" font-normal text-green-600"> 4.5%</div>
                         </div>
                     </div>
-                    <div className=" w-full bg-orange-600 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg cursor-pointer" onClick={onSubmit}>
-                        Add liquidity
+                    <div className=" w-full h-14 bg-orange-600 justify-center items-center rounded-xl py-3 mt-3 text-center text-white font-medium text-lg cursor-pointer" onClick={onSubmit}>
+                        {isLoading ? <PropagateLoader color="white" className=" mt-2" /> : <div>Add liquidity</div>}
                     </div>
                 </div>
             </div>

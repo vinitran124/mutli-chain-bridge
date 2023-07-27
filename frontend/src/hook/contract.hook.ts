@@ -225,9 +225,22 @@ export const useContract = (
     }
   };
 
-  const addLiquidity = async (tokenAdd: string, amount: string) => {
+  const addLiquidity = async (
+    tokenAdd: string,
+    amount: string,
+    needValue: boolean,
+  ) => {
     if (contract) {
       try {
+        if (needValue) {
+          console.log('token');
+          return contract.methods
+            .addLiquidity(tokenAdd, web3.utils.toWei(amount, 'ether'))
+            .send({
+              from: walletAddress,
+            });
+        }
+        console.log('coin');
         return contract.methods
           .addLiquidity(tokenAdd, web3.utils.toWei(amount, 'ether'))
           .send({
