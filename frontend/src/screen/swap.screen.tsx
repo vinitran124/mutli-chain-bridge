@@ -76,8 +76,8 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
   const onSwap = async () => {
     const contractTranferAdd = '0xf988aa295bc1feddbcf4c567e855945d1c6a0619';
     const allowanceAmount = await getAmountCanTranfer(contractTranferAdd as string);
-    if (+(allowanceAmount || 0) < +(amountIn || 0)) {
-      return await approveAmountTransfer(contractTranferAdd as string)
+    if ((+(allowanceAmount || 0) < +(amountIn || 0)) && tokenIn.name == "VINI") {
+      await approveAmountTransfer(contractTranferAdd as string)
     }
 
     setLoading(true);
