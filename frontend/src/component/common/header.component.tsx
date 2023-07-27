@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hook/store.hook"
 import { useEffect, useState } from "react"
 import { setWalletAddress } from "../../store/wallet.slice"
 import detectEthereumProvider from "@metamask/detect-provider"
+import { formatAccount } from "../../helper/account.helper"
 
 interface HeaderProps {
     sidebarSubject: BehaviorSubject<boolean>
@@ -16,8 +17,6 @@ export const Header = ({ sidebarSubject }: HeaderProps) => {
     const onPressConnectWallet = () => {
         sidebarSubject.next(true)
     }
-
-    const walletAddress = useAppSelector(state => state.address)
 
     useEffect(() => {
         const refreshAccounts = (accounts: any) => {                /* New */
@@ -56,7 +55,7 @@ export const Header = ({ sidebarSubject }: HeaderProps) => {
                 <Link to={'/pool'} className="text-white font-medium text-xl mr-6">Pool</Link>
                 <Link to={'/faucet'} className="text-white font-medium text-xl mr-2">Faucet</Link>
             </div>
-            <div className="flex justify-center items-center bg-orange-600 text-white py-2 rounded-full px-3 mr-4 cursor-pointer max-w-[200px] truncate font-medium" onClick={onPressConnectWallet}><p className=" truncate">{address ? address : 'Connect wallet'}</p></div>
+            <div className="flex justify-center items-center bg-orange-600 text-white py-2 rounded-full px-3 mr-4 cursor-pointer max-w-[200px] truncate font-medium" onClick={onPressConnectWallet}><p className=" truncate">{address ? formatAccount(address) : 'Connect wallet'}</p></div>
         </div>
 
     )

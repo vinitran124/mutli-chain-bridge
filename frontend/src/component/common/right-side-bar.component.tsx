@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hook/store.hook';
 import { setWalletAddress } from '../../store/wallet.slice';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { formatBalance } from '../../utils';
+import { formatAccount } from '../../helper/account.helper';
 
 interface SidebarProps {
     listener: Observable<boolean>
@@ -90,7 +91,7 @@ export const Sidebar = ({ listener }: SidebarProps) => {
                         <div className=' flex flex-row items-center justify-between px-3 py-2'>
                             <div className=' flex flex-row'>
                                 {/* {jazzicon(20, parseInt(walletAddress.slice(2, 10), 16))} */}
-                                <div className="flex justify-center items-center bg-orange-600 text-white py-2 rounded-full px-3 mr-4 cursor-pointer max-w-[200px] truncate font-medium"><p className=" truncate">{walletAddress}</p></div>
+                                <div className="flex justify-center items-center bg-orange-600 text-white py-2 rounded-full px-3 mr-4 cursor-pointer max-w-[200px] truncate font-medium"><p className=" truncate">{formatAccount(walletAddress)}</p></div>
                             </div>
                             {/* <div>
                                 <FiLogOut color='white' size={'1.5rem'} onClick={handleDisconnect} className='cursor-pointer' />
