@@ -11,16 +11,38 @@ import {
 import { Token } from './screen/tokens.screen';
 import { Bridge } from './screen/bridge.screen';
 import { FaunetScreen } from './screen/faunet.screen';
+import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { notificationObservable } from './service/noti.service';
+import { toast } from 'react-toastify';
 
 function App() {
   const sidebarListener = new BehaviorSubject(false);
   const sidebarListener$ = sidebarListener.asObservable();
+
+  useEffect(() => {
+    const subscription = notificationObservable.subscribe((data: any) => {
+      toast(data.message, {
+        type: data.type,
+        theme: 'light',
+        autoClose: 5000,
+        closeOnClick: true,
+        position: 'top-right',
+      })
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div
       className="w-full h-screen box-border m-0 p-0 scroll-smooth bg-slate-900"
       id="home"
     >
+      <ToastContainer />
       <Header sidebarSubject={sidebarListener} />
       <Sidebar listener={sidebarListener$} />
       <div className=" overflow-y-auto max-h-full h-full">
@@ -46,3 +68,4 @@ function App() {
 }
 
 export default App;
+

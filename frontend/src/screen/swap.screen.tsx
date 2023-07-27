@@ -11,6 +11,7 @@ import { useToken } from '../hook/token.hook';
 import { Coin } from './faunet.screen';
 import Web3 from 'web3';
 import { PropagateLoader } from 'react-spinners';
+import { notify } from '../service/noti.service';
 
 interface Props {
   sidebarSubject: BehaviorSubject<boolean>
@@ -82,9 +83,15 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
 
     setLoading(true);
     if (tokenOut?.name == "VINI") {
-      swapForToken(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(() => setLoading(false)).catch(e => { setLoading(false); })
+      swapForToken(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(res => {
+        setLoading(false)
+        notify('Transaction Success', 'success')
+      }).catch(e => { setLoading(false); notify('Transaction Error', 'error') });
     } else {
-      swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(() => setLoading(false)).catch(e => { setLoading(false); })
+      swapForCoin(amountIn as string, amountOut as string, tokenIn.address, tokenOut?.address as string).then(res => {
+        setLoading(false)
+        notify('Transaction Success', 'success')
+      }).catch(e => { setLoading(false); notify('Transaction Error', 'error') });
     }
 
 

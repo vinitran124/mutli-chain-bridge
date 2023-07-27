@@ -8,6 +8,7 @@ import { Data } from "../../const/data";
 import { Coin } from "../../screen/faunet.screen";
 import { useContract } from "../../hook/contract.hook";
 import { IoMdClose } from "react-icons/io";
+import { notify } from "../../service/noti.service";
 
 interface Props {
     onCloseModal: () => void;
@@ -75,7 +76,7 @@ export const LiquidModal = ({ onCloseModal }: Props) => {
             return;
         }
 
-        addLiquidity(token.address, amount).then(res => onCloseModal());
+        addLiquidity(token.address, amount).then(() => { onCloseModal(); notify('Transaction Success', 'success') }).catch(e => notify('Transaction Error', 'error'));
     }
 
     return createPortal(

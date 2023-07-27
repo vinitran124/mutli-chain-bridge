@@ -223,7 +223,10 @@ export const useContract = (
       try {
         return contract.methods
           .addLiquidity(tokenAdd, web3.utils.toWei(amount, 'ether'))
-          .send({ from: walletAddress });
+          .send({
+            from: walletAddress,
+            value: web3.utils.toWei(amount, 'ether'),
+          });
       } catch (error) {
         console.error('Error in deposit:', error, tokenAdd, amount);
       }

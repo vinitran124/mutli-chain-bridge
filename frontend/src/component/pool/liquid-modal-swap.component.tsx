@@ -9,6 +9,7 @@ import { Coin } from "../../screen/faunet.screen";
 import { useContract } from "../../hook/contract.hook";
 import { IoMdClose } from "react-icons/io";
 import Swap from '../../const/swap.json'
+import { notify } from "../../service/noti.service";
 
 interface Props {
     onCloseModal: () => void;
@@ -28,7 +29,7 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
     const walletAddress = useAppSelector(state => state.address);
     const [contractAddress, setContractAddress] = useState<undefined | string>();
 
-    const { addLiquidity, addLiquiditySwap } = useContract(walletAddress, contractAddress, Swap.abi);
+    const { addLiquiditySwap } = useContract(walletAddress, contractAddress, Swap.abi);
 
     const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(e.target.value)
@@ -46,7 +47,7 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
         setAmountMin2(e.target.value)
     }
 
-    const handleCloseModal = (e: any) => {
+    const handleCloseModal = () => {
         onCloseModal()
     }
 
@@ -99,7 +100,7 @@ export const LiquidModalSwap = ({ onCloseModal }: Props) => {
             return;
         }
 
-        addLiquiditySwap(token.address, token2?.address, amount, amount2, amountMin, amountMin2).then(res => onCloseModal());
+        addLiquiditySwap(token.address, token2?.address, amount, amount2, amountMin, amountMin2).then(() => { onCloseModal(); notify('Transaction Success', 'success') }).catch(e => notify('Transaction Error', 'error'));
     }
 
     return createPortal(

@@ -11,6 +11,7 @@ import { useToken } from '../hook/token.hook';
 import { BridgeStatusModal } from '../component/bridge/bridge-status-modal.component';
 import Web3 from 'web3';
 import { PropagateLoader } from 'react-spinners';
+import { notify } from '../service/noti.service';
 
 interface Props {
   sidebarSubject: BehaviorSubject<boolean>;
@@ -134,14 +135,16 @@ export const Bridge = ({ sidebarSubject }: Props) => {
         user_address: walletAddress,
       })
       .then((res: any) => {
-        if (res.code == 400) {
-          return window.alert(res.message);
+        console.log(res.data.code)
+        if (res.data.code == 400) {
+          notify(res.data.message, 'error');
+          return;
         }
         setLoading(true);
-        setAmount(undefined);
         deposit(coin.address, amount as string).then(res => {
           setLoading(false)
-        }).catch(e => setLoading(false));
+          notify('Transaction Success', 'success')
+        }).catch(e => { setLoading(false); notify('Transaction Error', 'error') });
       });
   };
 

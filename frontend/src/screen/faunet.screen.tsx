@@ -5,6 +5,7 @@ import { Data } from "../const/data";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { api } from "../api/api";
 import { Chain } from "./bridge.screen";
+import { notify } from "../service/noti.service";
 
 export interface Coin {
     name: string;
@@ -47,9 +48,9 @@ export const FaunetScreen = () => {
             token: token.address,
             user_address: address
         }).then(res => {
-            if (res.status == 200) {
-                alert('Success');
-            } else alert('Error')
+            if (res.data.code == 200) {
+                notify('Success', 'success')
+            } else notify('Error', 'error')
         })
     }
 
