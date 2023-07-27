@@ -135,7 +135,6 @@ export const Bridge = ({ sidebarSubject }: Props) => {
         user_address: walletAddress,
       })
       .then((res: any) => {
-        console.log(res.data.code)
         if (res.data.code == 400) {
           notify(res.data.message, 'error');
           return;
@@ -247,18 +246,18 @@ export const Bridge = ({ sidebarSubject }: Props) => {
           </div>
           {(tokenAmountMax && coin.name != "VINI") && (
             <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
-              Balance: {Number(tokenAmountMax).toFixed(6)}
+              Balance: {Number(tokenAmountMax).toFixed(8)}
             </div>
           )}
           {(tokenBalance && coin.name == "VINI") && (
             <div className=" text-slate-400 w-full text-right pr-[14px] mb-2">
-              Balance: {Number(tokenBalance).toFixed(6)}
+              Balance: {Number(tokenBalance).toFixed(8)}
             </div>
           )}
         </div>
         {tokenAvaible && (
           <div className=" w-full text-right text-slate-300 pr-4 mt-2">
-            Token available in Pool: {Number(tokenAvaible).toFixed(6)}
+            Token available in Pool: {Number(tokenAvaible).toFixed(8)}
           </div>
         )}
         {getSubmitButton()}

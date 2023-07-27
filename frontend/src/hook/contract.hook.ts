@@ -151,11 +151,11 @@ export const useContract = (
   ) => {
     if (contract) {
       try {
-        const amountOut = (await contract.methods
-          .getAmountOut(web3.utils.toWei(amount, 'ether'), tokenIn, tokenOut)
-          .call()) as bigint;
-
-        return web3.utils.fromWei(amountOut, 'ether').toString();
+        const amountOut = await contract.methods
+          .getAmountsOut(web3.utils.toWei(amount, 'ether'), [tokenIn, tokenOut])
+          .call();
+        console.log(amountOut);
+        return web3.utils.fromWei(amountOut[1], 'ether');
       } catch (error) {
         console.error(
           'Error in getAmountt:',
@@ -201,13 +201,20 @@ export const useContract = (
   ) => {
     if (contract) {
       try {
+        console.log(
+          web3.utils.toWei(amountIn, 'ether'),
+          web3.utils.toWei(amountOut * 0.9, 'ether'),
+          [tokenIn, tokenOut].toString(),
+          walletAddress,
+          Date.now() + 3000000,
+        );
         return contract.methods
           .swapExactTokensForETH(
-            web3.utils.toWei(+amountIn, 'ether'),
-            web3.utils.toWei(+amountOut * 0.9, 'ether'),
+            web3.utils.toWei(amountIn, 'ether'),
+            web3.utils.toWei(amountOut * 0.9, 'ether'),
             [tokenIn, tokenOut],
             walletAddress,
-            Date.now() + 300,
+            Math.round((Date.now() + 3000000) / 1000),
           )
           .send({
             from: walletAddress,

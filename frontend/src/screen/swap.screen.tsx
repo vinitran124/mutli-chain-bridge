@@ -19,11 +19,11 @@ interface Props {
 
 export const SwapScreen = ({ sidebarSubject }: Props) => {
   const data = Data.coin['5555'].map(coin => {
-    return coin.name == 'XSR' ? { ...coin, address: '0x86d0f20e305BA901cc9035Ce2Bf19C2807cc3cf2' } : coin
+    return coin.name == 'XCR' ? { ...coin, address: '0x86d0f20e305BA901cc9035Ce2Bf19C2807cc3cf2' } : coin
   });
 
   const walletAddress = useAppSelector(state => state.address);
-  const { currentChainId, changeNetwork, getAmountSwap, getTransferContractAdd, swapForToken, swapForCoin } = useContract(walletAddress, '0xf988aa295bc1feddbcf4c567e855945d1c6a0619', SwapAbi.abi);
+  const { currentChainId, changeNetwork, getAmountSwap, swapForToken, swapForCoin } = useContract(walletAddress, '0xf988aa295bc1feddbcf4c567e855945d1c6a0619', SwapAbi.abi);
   const [tokenIn, setTokenIn] = useState(data[1]);
   const [tokenOut, setTokenOut] = useState<Coin>();
   const [amountIn, setAmountIn] = useState<string>();
@@ -65,8 +65,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
         <div className=" mt-2 w-full py-3 text-center bg-orange-500/90 rounded-xl text-white font-medium text-xl cursor-pointer">Enter amount</div>
       )
     }
-
-    if (!balance || +amountIn > +balance || !amountOut) {
+    if ((!balance && !tokenBalance) || !amountOut) {
       return;
     }
     return (
@@ -75,10 +74,10 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
   }
 
   const onSwap = async () => {
-    const contractTranferAdd = await getTransferContractAdd(tokenIn.address);
+    const contractTranferAdd = '0xf988aa295bc1feddbcf4c567e855945d1c6a0619';
     const allowanceAmount = await getAmountCanTranfer(contractTranferAdd as string);
-    if (+(allowanceAmount || 0) < +(amountIn || 0) || isLoading) {
-      await approveAmountTransfer(contractTranferAdd as string)
+    if (+(allowanceAmount || 0) < +(amountIn || 0)) {
+      return await approveAmountTransfer(contractTranferAdd as string)
     }
 
     setLoading(true);
@@ -131,7 +130,7 @@ export const SwapScreen = ({ sidebarSubject }: Props) => {
     }
 
     getAmount()
-  }, [walletAddress, currentChainId, tokenIn.address, amountIn])
+  }, [walletAddress, currentChainId, tokenIn.address, tokenOut?.address, amountIn])
 
   return (
     <div className="w-full h-full items-center justify-center flex bg-slate-900">

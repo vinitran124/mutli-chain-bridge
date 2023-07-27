@@ -73,9 +73,6 @@ export const useToken = (
           .allowance(walletAddress, contractAdd)
           .call();
         const bInt = web3.utils.fromWei(balance.toString(), 'ether');
-        if (bInt[bInt.length - 1] == '.') {
-          bInt.substring(0, bInt.length - 2);
-        }
 
         return bInt;
       } catch (error) {
