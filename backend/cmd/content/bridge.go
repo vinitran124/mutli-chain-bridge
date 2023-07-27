@@ -27,6 +27,8 @@ func (v *V1Router) bridge(c *gin.Context) {
 		responseErrUnauthorized(c)
 		return
 	}
+	auth.TokenAddress = strings.ToLower(auth.TokenAddress)
+	auth.UserAddress = strings.ToLower(auth.UserAddress)
 
 	if auth.OutChain == auth.InChain {
 		responseFailureWithMessage(c, "invalid input and output chainId")
@@ -84,8 +86,8 @@ func (v *V1Router) bridge(c *gin.Context) {
 		InputChain:  auth.InChain,
 		OutputChain: auth.OutChain,
 		RawAmount:   auth.Amount,
-		Token:       strings.ToLower(auth.TokenAddress),
-		UserAddress: strings.ToLower(auth.UserAddress),
+		Token:       auth.TokenAddress,
+		UserAddress: auth.UserAddress,
 	})
 	if err != nil {
 		log.Println(err)
