@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
+	"strings"
 )
 
 const amountFaucet = "10000000000000000000" //10token
@@ -25,8 +25,8 @@ func (v *V1Router) faucet(c *gin.Context) {
 		return
 	}
 
-	log.Println(request.Token)
-	log.Println(request.ChainId)
+	request.Token = strings.ToLower(request.Token)
+	request.UserAddress = strings.ToLower(request.UserAddress)
 
 	isValidToken, err := bob.Tokens(
 		ctx,
@@ -34,13 +34,11 @@ func (v *V1Router) faucet(c *gin.Context) {
 		bob.SelectWhere.Tokens.Address.EQ(request.Token),
 		bob.SelectWhere.Tokens.ChainID.EQ(request.ChainId)).Exists()
 	if err != nil {
-		log.Println(1)
 		responseFailureWithMessage(c, "invalid token")
 		return
 	}
 
 	if isValidToken == false {
-		log.Println(2)
 		responseFailureWithMessage(c, "invalid token")
 		return
 	}
