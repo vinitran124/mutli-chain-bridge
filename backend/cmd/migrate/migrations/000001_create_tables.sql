@@ -9,7 +9,6 @@ CREATE TABLE "tokens"(
 );
 
 CREATE UNIQUE INDEX ON tokens(address, chain_id);
-CREATE UNIQUE INDEX ON tokens(address, name);
 
 CREATE TABLE "transactions"(
     "id" uuid PRIMARY KEY,
