@@ -4,25 +4,17 @@ import (
 	"bridge/app/content/bob"
 	"bridge/app/utils"
 	"context"
-	"fmt"
-	"github.com/joho/godotenv"
+	"github.com/urfave/cli/v2"
 	"log"
-	"strings"
 	"time"
 )
 
-const (
-	envPath = ".env,.env.local"
-)
-
-func init() {
-	if err := godotenv.Overload(strings.Split(envPath, ",")...); err != nil {
-		fmt.Println("Load env error", err.Error())
-	}
+func beforeStartCronjob(c *cli.Context) error {
+	utils.SetContextSQL()
+	return nil
 }
 
-func main() {
-	utils.SetContextSQL()
+func startCronjob(c *cli.Context) error {
 	for {
 		expiredRequest, err := bob.BridgeRequests(context.Background(),
 			SQLRepository(),

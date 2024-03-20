@@ -3,31 +3,19 @@ package main
 import (
 	"bridge/app/content/datastore"
 	"bridge/app/utils"
-	"context"
 	"fmt"
-	"github.com/joho/godotenv"
+	"github.com/urfave/cli/v2"
 	"log"
-	"strings"
 )
 
-const (
-	redisNewDepositEvent = "NEW_DEPOSIT_EVENT"
-	redisNewRequest      = "NEW_BRIDGE_REQUEST"
-	envPath              = ".env,.env.local"
-)
-
-func init() {
-	if err := godotenv.Overload(strings.Split(envPath, ",")...); err != nil {
-		fmt.Println("Load env error", err.Error())
-	}
-}
-
-func main() {
-	ctx := context.Background()
+func beforeStartBlockchain(c *cli.Context) error {
 	utils.SetContextSQL()
 	utils.SetContextRedisClient()
 	utils.SetChainClient()
+	return nil
+}
 
+func startBlockchain(c *cli.Context) error {
 	eventSub := RedisRepository().Subscribe(ctx, redisNewDepositEvent)
 	defer eventSub.Close()
 
@@ -75,13 +63,6 @@ func main() {
 		}
 	}()
 
-	//go func() {
-	//	for msg := range requestCh {
-	//		requestId = append(requestId, msg.Payload)
-	//	}
-	//}()
-
 	for {
-
 	}
 }

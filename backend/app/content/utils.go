@@ -1,13 +1,8 @@
-package main
+package content
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-)
-
-const (
-	argsAddr        = "addr"
-	redisNewRequest = "NEW_BRIDGE_REQUEST"
 )
 
 type Response struct {

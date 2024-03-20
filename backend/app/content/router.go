@@ -1,12 +1,10 @@
-package main
+package content
 
-import (
-	"github.com/gin-gonic/gin"
-)
+import "github.com/gin-gonic/gin"
 
 type V1Router struct{}
 
-func v1Router(parent *gin.RouterGroup) {
+func NewV1Router(parent *gin.RouterGroup) {
 	router := parent.Group("")
 	r := V1Router{}
 	router.GET("/", r.helloWorld)

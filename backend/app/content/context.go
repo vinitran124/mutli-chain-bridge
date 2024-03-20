@@ -1,4 +1,4 @@
-package main
+package content
 
 import (
 	"bridge/app/blockchain/chainFactory"
@@ -10,6 +10,7 @@ import (
 func SQLRepository() bob.DB {
 	return bob.NewDB(utils.GetContextSQL().Client.DB)
 }
+
 func RedisRepository() *redis.Client {
 	return utils.GetContextRedisClient().Client
 }
