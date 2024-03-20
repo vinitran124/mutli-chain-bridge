@@ -4,15 +4,11 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o crawler     ./cmd/crawler/*go
-RUN go build -o blockchain  ./cmd/blockchain/*go
-RUN go build -o cronjob     ./cmd/cronJob/*go
-RUN go build -o content     ./cmd/content/*go
+RUN go build -o main     ./cmd/*go
 
 FROM alpine:latest
 RUN apk add ca-certificates multirun
 WORKDIR /app
 COPY --from=builder /app/. ./
 EXPOSE 3030
-CMD ["multirun","./crawler","./blockchain", "./cronjob","./content server"]
 
