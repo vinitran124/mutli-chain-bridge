@@ -2,7 +2,6 @@ package main
 
 import (
 	"bridge/app/content"
-	"bridge/app/utils"
 	"bridge/config"
 	"fmt"
 	"github.com/gin-contrib/cors"
@@ -13,9 +12,13 @@ import (
 )
 
 func beforeStartApiServer(c *cli.Context) error {
-	utils.SetContextSQL()
-	utils.SetContextRedisClient()
-	utils.SetChainClient()
+	cfg, err := config.Load(c)
+	if err != nil {
+		return err
+	}
+	SetContextSQL(cfg.Database)
+	SetContextRedisClient(cfg.Redis)
+	SetChainClient()
 	return nil
 }
 

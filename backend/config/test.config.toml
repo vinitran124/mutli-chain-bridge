@@ -1,0 +1,13 @@
+Environment = "development" # "production" or "development"
+[Database]
+    User = "postgres"
+    Password = "123456"
+    Name = "state_db"
+    Host = "localhost"
+    Port = "5432"
+    MaxConns = 200
+#[Redis]
+#    Password = ""
+#    Name = "redis"
+#    Host = "localhost"
+#    Port = "6380"

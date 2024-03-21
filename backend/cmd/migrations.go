@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bridge/app/utils"
 	"bridge/config"
 	"embed"
 	"fmt"
@@ -13,8 +12,12 @@ import (
 var embedMigrations embed.FS
 
 func beforeMigration(c *cli.Context) error {
+	cfg, err := config.Load(c)
+	if err != nil {
+		return err
+	}
 	goose.SetBaseFS(embedMigrations)
-	utils.SetContextSQL()
+	SetContextSQL(cfg.Database)
 	return nil
 }
 
@@ -22,9 +25,9 @@ func startMigration(c *cli.Context) error {
 	migrateAction := c.String(config.FlagMigrateAction)
 	switch migrateAction {
 	case config.FlagUpAction:
-		return goose.Up(utils.GetContextSQL().Client.DB, "migrations")
+		return goose.Up(GetContextSQL().DB, "migrations")
 	case config.FlagDownAction:
-		return goose.Down(utils.GetContextSQL().Client.DB, "migrations")
+		return goose.Down(GetContextSQL().DB, "migrations")
 	default:
 		return fmt.Errorf(`migration: invalid magration flags. "up" or "down" only`)
 	}

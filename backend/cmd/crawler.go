@@ -3,7 +3,7 @@ package main
 import (
 	"bridge/app/content/bob"
 	"bridge/app/content/datastore"
-	"bridge/app/utils"
+	"bridge/config"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
@@ -17,9 +17,13 @@ const (
 )
 
 func beforeStartCrawler(c *cli.Context) error {
-	utils.SetContextSQL()
-	utils.SetContextRedisClient()
-	utils.SetChainClient()
+	cfg, err := config.Load(c)
+	if err != nil {
+		return err
+	}
+	SetContextSQL(cfg.Database)
+	SetContextRedisClient(cfg.Redis)
+	SetChainClient()
 	return nil
 }
 

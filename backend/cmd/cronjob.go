@@ -2,7 +2,7 @@ package main
 
 import (
 	"bridge/app/content/bob"
-	"bridge/app/utils"
+	"bridge/config"
 	"context"
 	"github.com/urfave/cli/v2"
 	"log"
@@ -10,7 +10,11 @@ import (
 )
 
 func beforeStartCronjob(c *cli.Context) error {
-	utils.SetContextSQL()
+	cfg, err := config.Load(c)
+	if err != nil {
+		return err
+	}
+	SetContextSQL(cfg.Database)
 	return nil
 }
 
