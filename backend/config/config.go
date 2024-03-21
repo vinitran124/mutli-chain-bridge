@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bridge/db"
 	"bytes"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
@@ -31,8 +32,9 @@ You could find some examples:
 [TOML format]: https://en.wikipedia.org/wiki/TOML
 */
 type Config struct {
-	Environment LogEnvironment `mapstructure:"Environment" jsonschema:"enum=production,enum=development"`
-	Database    DatabaseConfig `mapstructure:"Database"`
+	Environment LogEnvironment    `mapstructure:"Environment" jsonschema:"enum=production,enum=development"`
+	Database    db.DatabaseConfig `mapstructure:"Database"`
+	Redis       db.RedisConfig    `mapstructure:"Redis"`
 }
 
 // Default parses the default configuration values.
@@ -104,27 +106,3 @@ const (
 	// EnvironmentDevelopment development log environment.
 	EnvironmentDevelopment = LogEnvironment("development")
 )
-
-// Config provide fields to configure the pool
-type DatabaseConfig struct {
-	// Database name
-	Name string `mapstructure:"Name"`
-
-	// Database User name
-	User string `mapstructure:"User"`
-
-	// Database Password of the user
-	Password string `mapstructure:"Password"`
-
-	// Host address of database
-	Host string `mapstructure:"Host"`
-
-	// Port Number of database
-	Port string `mapstructure:"Port"`
-
-	// EnableLog
-	EnableLog bool `mapstructure:"EnableLog"`
-
-	// MaxConns is the maximum number of connections in the pool.
-	MaxConns int `mapstructure:"MaxConns"`
-}

@@ -4,9 +4,15 @@ package config
 const DefaultValues = `
 Environment = "development" # "production" or "development"
 [Database]
-User = "postgres"
-Password = "123456"
-Name = "state_db"
-Host = "postgres"
-Port = "5432"
+	User = "postgres"
+	Password = "123456"
+	Name = "postgres"
+	Host = "localhost"
+	Port = "5432"
+	MaxConns = 200
+[Redis]
+	Password = ""
+	Name = "redis"
+	Host = "localhost"
+	Port = "6380"
 `
