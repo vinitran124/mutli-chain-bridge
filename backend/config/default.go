@@ -21,11 +21,11 @@ Environment = "development" # "production" or "development"
 		Erc20TokenList = "0x6b08b796b4b43d565c34cf4b57d8c871db410ebe"
 		ChainId = "97"
 		BridgeAddress = ""
-		PrivateKey = "74d6240ad8130d96d49468e2b1344063da9a902ad5650d098bf046fe716ca2b3" 	// only for testing
+		PrivateKey = "74d6240ad8130d96d49468e2b1344063da9a902ad5650d098bf046fe716ca2b3" 	
 	[Etherman.Sepolia]
 		RPC = "https://1rpc.io/sepolia"
 		Erc20TokenList = "0x15f8253779428d9ea5b054deef3e454d539ddf7e"
 		ChainId = "11155111"
 		BridgeAddress = ""
-		PrivateKey = "74d6240ad8130d96d49468e2b1344063da9a902ad5650d098bf046fe716ca2b3" 	// only for testing
+		PrivateKey = "74d6240ad8130d96d49468e2b1344063da9a902ad5650d098bf046fe716ca2b3" 	
 `

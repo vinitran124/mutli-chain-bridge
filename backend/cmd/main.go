@@ -26,13 +26,21 @@ var (
 		Usage:    "Configuration up or down in migration",
 		Required: true,
 	}
+	configFileFlag = cli.StringFlag{
+		Name:     config.FlagCfg,
+		Aliases:  []string{"c"},
+		Usage:    "Configuration `FILE`",
+		Required: false,
+	}
 )
 
 func main() {
 	app := cli.NewApp()
 	app.Name = appName
 	app.Version = backend.Version
-	flags := []cli.Flag{}
+	flags := []cli.Flag{
+		&configFileFlag,
+	}
 	app.Commands = []*cli.Command{
 		{
 			Name:    "version",
