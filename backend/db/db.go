@@ -18,7 +18,6 @@ func NewSQLDB(cfg DatabaseConfig) *bun.DB {
 	var db *bun.DB
 	db = bun.NewDB(sql.OpenDB(pgdriver.NewConnector(
 		pgdriver.WithDSN(dsn),
-		pgdriver.WithPassword(cfg.Password),
 	)), pgdialect.New())
 
 	return db

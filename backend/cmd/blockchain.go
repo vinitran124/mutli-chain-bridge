@@ -1,8 +1,9 @@
 package main
 
 import (
-	"bridge/app/content/datastore"
 	"bridge/config"
+	"bridge/content/datastore"
+	"bridge/context"
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"log"
@@ -13,9 +14,10 @@ func beforeStartBlockchain(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	SetContextSQL(cfg.Database)
-	SetContextRedisClient(cfg.Redis)
-	SetChainClient()
+	context.SetContextConfig(cfg)
+	context.SetContextSQL(cfg.Database)
+	context.SetContextRedisClient(cfg.Redis)
+	context.SetChainClient()
 	return nil
 }
 

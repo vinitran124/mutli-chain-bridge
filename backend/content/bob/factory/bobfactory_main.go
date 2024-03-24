@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	models "bridge/app/content/bob"
+	models "bridge/content/bob"
 	"github.com/aarondl/opt/null"
 	"github.com/google/uuid"
 	"github.com/jaswdr/faker"

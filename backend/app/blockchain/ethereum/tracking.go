@@ -1,7 +1,7 @@
 package ethereum
 
 import (
-	"bridge/app/content/bob"
+	"bridge/content/bob"
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum"

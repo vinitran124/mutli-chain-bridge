@@ -2,6 +2,7 @@ package main
 
 import (
 	"bridge/config"
+	"bridge/context"
 	"embed"
 	"fmt"
 	"github.com/pressly/goose/v3"
@@ -17,7 +18,7 @@ func beforeMigration(c *cli.Context) error {
 		return err
 	}
 	goose.SetBaseFS(embedMigrations)
-	SetContextSQL(cfg.Database)
+	context.SetContextSQL(cfg.Database)
 	return nil
 }
 
@@ -25,9 +26,9 @@ func startMigration(c *cli.Context) error {
 	migrateAction := c.String(config.FlagMigrateAction)
 	switch migrateAction {
 	case config.FlagUpAction:
-		return goose.Up(GetContextSQL().DB, "migrations")
+		return goose.Up(context.GetContextSQL().DB, "migrations")
 	case config.FlagDownAction:
-		return goose.Down(GetContextSQL().DB, "migrations")
+		return goose.Down(context.GetContextSQL().DB, "migrations")
 	default:
 		return fmt.Errorf(`migration: invalid magration flags. "up" or "down" only`)
 	}

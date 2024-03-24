@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bridge/app/content/bob"
 	"bridge/config"
-	"context"
+	"bridge/content/bob"
+	"bridge/context"
 	"github.com/urfave/cli/v2"
 	"log"
 	"time"
@@ -14,13 +14,13 @@ func beforeStartCronjob(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	SetContextSQL(cfg.Database)
+	context.SetContextSQL(cfg.Database)
 	return nil
 }
 
 func startCronjob(c *cli.Context) error {
 	for {
-		expiredRequest, err := bob.BridgeRequests(context.Background(),
+		expiredRequest, err := bob.BridgeRequests(ctx,
 			SQLRepository(),
 			bob.SelectWhere.BridgeRequests.CreatedAt.LTE(time.Now().Add(-10*time.Minute)),
 		).All()
@@ -29,7 +29,7 @@ func startCronjob(c *cli.Context) error {
 			continue
 		}
 
-		_, err = expiredRequest.DeleteAll(context.Background(), SQLRepository())
+		_, err = expiredRequest.DeleteAll(ctx, SQLRepository())
 		if err != nil {
 			log.Println(err)
 			continue

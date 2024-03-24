@@ -7,7 +7,7 @@ import (
 	"context"
 	"time"
 
-	models "bridge/app/content/bob"
+	models "bridge/content/bob"
 	"github.com/aarondl/opt/omit"
 	"github.com/google/uuid"
 	"github.com/jaswdr/faker"

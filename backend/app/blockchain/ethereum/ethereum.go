@@ -2,7 +2,7 @@ package ethereum
 
 import (
 	"bridge/app/blockchain/chainFactory"
-	"bridge/app/content/bob"
+	"bridge/content/bob"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
