@@ -2,11 +2,12 @@ package config
 
 import (
 	"bridge/db"
+	"bridge/etherman"
 	"bytes"
-	"fmt"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
+	"log"
 	"path/filepath"
 	"strings"
 )
@@ -35,6 +36,7 @@ type Config struct {
 	Environment LogEnvironment    `mapstructure:"Environment" jsonschema:"enum=production,enum=development"`
 	Database    db.DatabaseConfig `mapstructure:"Database"`
 	Redis       db.RedisConfig    `mapstructure:"Redis"`
+	Etherman    etherman.Config   `mapstructure:"Etherman"`
 }
 
 // Default parses the default configuration values.
@@ -78,9 +80,9 @@ func Load(ctx *cli.Context) (*Config, error) {
 	if err != nil {
 		_, ok := err.(viper.ConfigFileNotFoundError)
 		if ok {
-			fmt.Println("config file not found")
+			log.Println("config file not found")
 		} else {
-			fmt.Println("error reading config file: ", err)
+			log.Println("error reading config file: ", err)
 			return nil, err
 		}
 	}

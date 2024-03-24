@@ -1,8 +1,8 @@
 package content
 
 import (
-	"bridge/app/content/bob"
-	"bridge/app/content/datastore"
+	"bridge/content/bob"
+	"bridge/content/datastore"
 	"context"
 	"database/sql"
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-type BridgeRequest struct {
+type BridgePayload struct {
 	InChain      string `json:"in_chain"`
 	OutChain     string `json:"out_chain"`
 	Amount       string `json:"amount"`
@@ -21,7 +21,7 @@ type BridgeRequest struct {
 
 func (v *V1Router) bridge(c *gin.Context) {
 	ctx := context.Background()
-	var auth BridgeRequest
+	var auth BridgePayload
 	err := c.BindJSON(&auth)
 	if err != nil {
 		responseErrUnauthorized(c)

@@ -1,12 +1,14 @@
 package main
 
 import (
-	"bridge/app/content"
 	"bridge/config"
+	"bridge/content"
+	"bridge/context"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli/v2"
+	"log"
 	"strings"
 	"time"
 )
@@ -16,14 +18,14 @@ func beforeStartApiServer(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	SetContextSQL(cfg.Database)
-	SetContextRedisClient(cfg.Redis)
-	SetChainClient()
+	context.SetContextConfig(cfg)
+	context.SetContextSQL(cfg.Database)
+	context.SetContextRedisClient(cfg.Redis)
+	context.SetChainClient()
 	return nil
 }
 
 func startAPIServer(c *cli.Context) error {
-	fmt.Println("start")
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -38,7 +40,7 @@ func startAPIServer(c *cli.Context) error {
 		return fmt.Errorf("[API Server] start error: addr is empty")
 	}
 
-	fmt.Printf("ListenAndServe: %s\n", addr)
+	log.Printf("Listen And Serve: %s\n", addr)
 
 	v1 := router.Group("/api/v1")
 	content.NewV1Router(v1)

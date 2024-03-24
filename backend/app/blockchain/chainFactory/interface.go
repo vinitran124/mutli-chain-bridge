@@ -1,7 +1,7 @@
 package chainFactory
 
 import (
-	"bridge/app/content/bob"
+	"bridge/content/bob"
 	"fmt"
 	"math/big"
 	"os"

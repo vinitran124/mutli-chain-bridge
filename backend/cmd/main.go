@@ -3,12 +3,9 @@ package main
 import (
 	backend "bridge"
 	"bridge/config"
-	"fmt"
-	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
-	"strings"
 )
 
 const (
@@ -30,12 +27,6 @@ var (
 		Required: true,
 	}
 )
-
-func init() {
-	if err := godotenv.Overload(strings.Split(envPath, ",")...); err != nil {
-		fmt.Println("Load env error", err.Error())
-	}
-}
 
 func main() {
 	app := cli.NewApp()

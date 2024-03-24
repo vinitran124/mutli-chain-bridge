@@ -1,7 +1,7 @@
 package datastore
 
 import (
-	b "bridge/app/content/bob"
+	b "bridge/content/bob"
 	"context"
 	"github.com/aarondl/opt/omit"
 	"github.com/google/uuid"
