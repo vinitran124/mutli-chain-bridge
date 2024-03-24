@@ -64,6 +64,7 @@ func Load(ctx *cli.Context) (*Config, error) {
 	configFilePath := ctx.String(FlagCfg)
 	if configFilePath != "" {
 		dirName, fileName := filepath.Split(configFilePath)
+		log.Println("config path: ", configFilePath)
 
 		fileExtension := strings.TrimPrefix(filepath.Ext(fileName), ".")
 		fileNameWithoutExtension := strings.TrimSuffix(fileName, "."+fileExtension)
@@ -75,7 +76,6 @@ func Load(ctx *cli.Context) (*Config, error) {
 	viper.AutomaticEnv()
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
-	//viper.SetEnvPrefix("ZKEVM_NODE")
 	err = viper.ReadInConfig()
 	if err != nil {
 		_, ok := err.(viper.ConfigFileNotFoundError)
