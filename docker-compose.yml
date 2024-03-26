@@ -19,6 +19,7 @@ services:
     command:
       - "/bin/sh"
       - "-c"
+      - "go run cmd/*.go migration --action up"
       - "/app/main api --cfg /app/config.toml"
 #
 #  blockchain:
