@@ -1,16 +1,17 @@
 package main
 
 import (
+	"bridge/config"
+	context2 "context"
+
 	"bridge/app/blockchain/chainFactory"
 	"bridge/context"
-	context2 "context"
+
 	"github.com/redis/go-redis/v9"
 	"github.com/stephenafamo/bob"
 )
 
-var (
-	ctx = context2.Background()
-)
+var ctx = context2.Background()
 
 const (
 	contextSQLRepository = "CONTEXT_SQL_REPOSITORY"
@@ -29,4 +30,8 @@ func RedisRepository() *redis.Client {
 
 func ChainRepository(chainId string) chainFactory.IChain {
 	return context.GetContextChainClient(chainId)
+}
+
+func Config() *config.Config {
+	return context.GetContextConfig()
 }

@@ -1,16 +1,18 @@
 package content
 
 import (
-	"bridge/content/bob"
-	"bridge/etherman"
 	"context"
 	"fmt"
+	"strings"
+
+	"bridge/content/bob"
+	"bridge/etherman"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
-	"strings"
 )
 
-const amountFaucet = "10000000000000000000" //10token
+const amountFaucet = "10000000000000000000" // 10token
 
 type FaucetPayload struct {
 	UserAddress string `json:"user_address"`
@@ -46,11 +48,11 @@ func (v *V1Router) faucet(c *gin.Context) {
 	}
 
 	etherClient, err := etherman.NewClientFromChainId(ToUint64(payload.ChainId), ConfigRepository().Etherman)
-	if isValidToken == false {
+	if err != nil {
 		responseFailureWithMessage(c, "client not found")
 		return
 	}
-	
+
 	tx, err := etherClient.TransferErc20Token(etherClient.SenderAddress[0], common.HexToAddress(payload.Token), common.HexToAddress(payload.UserAddress), ToBigInt(amountFaucet))
 	if err != nil {
 		responseErrInternalServerError(c)
