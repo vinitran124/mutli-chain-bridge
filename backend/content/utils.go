@@ -1,10 +1,11 @@
 package content
 
 import (
-	"github.com/gin-gonic/gin"
 	"math/big"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"log"
+
 	"bridge/config"
 	"bridge/content/datastore"
 	"bridge/context"
-	"fmt"
+
 	"github.com/urfave/cli/v2"
-	"log"
 )
 
 func beforeStartBlockchain(c *cli.Context) error {
