@@ -1,13 +1,15 @@
 package etherman_test
 
 import (
-	"bridge/etherman"
 	"context"
+	"log"
+	"testing"
+
+	"bridge/etherman"
+
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"log"
-	"testing"
 )
 
 const (
