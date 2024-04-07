@@ -5,8 +5,14 @@ import {
   CartesianGrid,
   Tooltip,
   Area,
+  ResponsiveContainer,
 } from 'recharts';
 import { CoinMarketChartModel } from '../../model/market-chart.model';
+import moment from 'moment';
+import { formatPrice } from '../../utils';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
 export const CoinMarketChart = ({
   datas,
@@ -14,46 +20,54 @@ export const CoinMarketChart = ({
   datas: CoinMarketChartModel[];
 }) => {
   return (
-    <AreaChart
-      width={730}
-      height={250}
-      data={datas}
-      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-    >
-      <defs>
-        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#704CE3" stopOpacity={1} />
-          <stop offset="95%" stopColor="#534CF7" stopOpacity={0.4} />
-        </linearGradient>
-      </defs>
-      <XAxis dataKey="date" />
-      <YAxis
-        type="number"
-        domain={[
-          Math.max(...datas.map(item => item.price)),
-          Math.min(...datas.map(item => item.price)),
-        ]}
-      />
-      <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip content={CustomTooltip}/>
-      <Area
-        type="monotone"
-        dataKey="price"
-        stroke="#534CF7"
-        dot={false}
-        fillOpacity={1}
-        fill="url(#colorPrice)"
-      />
-    </AreaChart>
+    <ResponsiveContainer width="100%" height="50%">
+      <AreaChart
+        data={datas}
+        margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
+      >
+        <defs>
+          <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#704CE3" stopOpacity={1} />
+            <stop offset="95%" stopColor="#534CF7" stopOpacity={0.4} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="date" interval={30} />
+        <YAxis
+          orientation="right"
+          type="number"
+          domain={[
+            Math.max(...datas.map(item => Number(item.price))),
+            Math.min(...datas.map(item => Number(item.price))),
+          ]}
+        />
+        {/* <CartesianGrid strokeDasharray="3 3" /> */}
+        <Tooltip content={CustomTooltip} />
+        <Area
+          type="natural"
+          dataKey="price"
+          stroke="#534CF7"
+          dot={false}
+          fillOpacity={1}
+          fill="url(#colorPrice)"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
   );
 };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white text-[red]">
-        <p className="">{`$${payload[0].payload?.price}`}</p>
-        <p className="">{`${payload[0]?.payload?.date}`}</p>
+      <div className="bg-[#1B232D] rounded-[8px] p-[16px]">
+        <p className="">{moment(payload[0]?.payload?.date).toString()}</p>
+        <p className="mt-[6px]">
+          <span className="text-[#4A6382]">Price: </span>$
+          {formatPrice(payload[0].payload?.price)}
+        </p>{' '}
+        <p className="">
+          <span className="text-[#4A6382]">Volumn: </span>$
+          {formatPrice(payload[0].payload?.volumn)}
+        </p>
       </div>
     );
   }
