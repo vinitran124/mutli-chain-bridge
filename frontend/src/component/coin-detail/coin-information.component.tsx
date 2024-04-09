@@ -21,7 +21,7 @@ export const CoinInformation = ({ data }: { data: CoinDetail }) => {
   }));
 
   return (
-    <div className="flex flex-col space-y-[16px] text-[14px] w-[400px]">
+    <div className="flex flex-col space-y-[16px] text-[14px] w-full">
       {/* Coin Analysis */}
       <div className="flex flex-col space-y-[4px]">
         <div className="flex flex-row items-center space-x-[5px]">

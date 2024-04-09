@@ -20,7 +20,7 @@ export const CoinMarketChart = ({
   datas: CoinMarketChartModel[];
 }) => {
   return (
-    <ResponsiveContainer width="100%" height="50%">
+    <ResponsiveContainer width="90%" height="50%">
       <AreaChart
         data={datas}
         margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
@@ -59,7 +59,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-[#1B232D] rounded-[8px] p-[16px]">
-        <p className="">{moment(payload[0]?.payload?.date).toString()}</p>
+        <p className="">{payload[0]?.payload?.date}</p>
         <p className="mt-[6px]">
           <span className="text-[#4A6382]">Price: </span>$
           {formatPrice(payload[0].payload?.price)}

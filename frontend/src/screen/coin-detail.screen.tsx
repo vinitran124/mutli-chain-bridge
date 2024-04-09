@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import moment from 'moment';
@@ -27,6 +27,10 @@ export const CoinDetailScreen = () => {
   >([]);
   const [coinDetail, setCoinDetail] = useState<CoinDetail | undefined>();
 
+  useEffect(() => {
+    getData();
+  }, [filter]);
+
   //   const timerInterval = setInterval(() => {
   //     // getData();
 
@@ -38,8 +42,6 @@ export const CoinDetailScreen = () => {
   const getData = async () => {
     const searchId = 'bella-protocol';
     // const searchId = paramId ?? 'bella-protocol';
-    console.log('paramId', paramId);
-    console.log('paramId', searchId);
     // get detail
     await axios
       .get(`https://api.coingecko.com/api/v3/coins/${searchId}`)
@@ -113,28 +115,22 @@ export const CoinDetailScreen = () => {
             };
           }),
         );
-
-        console.log('marketChartData:', marketChartData);
-        console.log('marketChartData.length:', marketChartData.length);
       });
   };
 
-  const handleChangeFilter = async (value: MarketChartFilter) => {
-    await setFilter(value);
-    console.log('value:', value);
-    console.log('filter:', filter);
-    getData();
+  const handleChangeFilter = (value: MarketChartFilter) => {
+    setFilter(value);
   };
 
   return (
-    <div className="pt-[100px] px-[24px] text-[#DFE5EC]">
+    <div className="pt-[100px] px-[24px] text-[#DFE5EC] ">
       {coinDetail ? (
-        <div className="flex flex-row space-x-[24px] justify-between">
-          <div className="overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-row justify-between">
+          <div className="w-[400px] overflow-y-auto">
             <CoinInformation data={coinDetail} />
           </div>
-          <div className="w-full flex flex-col items-center">
-            <div className="w-[60%] flex flex-row justify-center space-x-[8px] rounded-[8px]">
+          <div className="flex-1 flex flex-col items-center">
+            <div className="flex flex-row justify-center space-x-[8px] rounded-[8px]">
               {MarketChartFilterDays.getList().map(item => (
                 <div
                   className={
