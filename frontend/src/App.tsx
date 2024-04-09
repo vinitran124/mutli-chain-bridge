@@ -61,7 +61,7 @@ function App() {
             element={<PoolScreen sidebarSubject={sidebarListener} />}
           />
           <Route path="/tokens" element={<Token />} />
-          <Route path="/coin-detail/:id" element={<CoinDetailScreen />} />
+          <Route path="/coin-detail/:paramId" element={<CoinDetailScreen />} />
           <Route path="/faucet" element={<FaunetScreen />} />
         </Routes>
       </div>

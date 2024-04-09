@@ -40,27 +40,29 @@ export const CoinDetailScreen = () => {
   //   }, 5000);
 
   const getData = async () => {
-    const searchId = 'bella-protocol';
-    // const searchId = paramId ?? 'bella-protocol';
+    // const searchId = 'bella-protocol';
+    const searchId = paramId ?? 'bella-protocol';
+    console.log('paramId:', paramId);
     // get detail
     await axios
       .get(`https://api.coingecko.com/api/v3/coins/${searchId}`)
       .then(res => {
+        console.log('res:', res);
         setCoinDetail(
           new CoinDetail(
             res.data.id,
             res.data.symbol,
             res.data.name,
             res.data.market_cap_rank,
-            Number(res.data.market_data.current_price[filter.currency]),
+            Number(res.data.market_data.current_price?.[filter.currency]),
             res.data.image.large,
             res.data.market_data.price_change_percentage_24h,
-            res.data.market_data.high_24h[filter.currency],
-            res.data.market_data.low_24h[filter.currency],
-            res.data.market_data.market_cap[filter.currency],
-            res.data.market_data.fully_diluted_valuation[filter.currency],
-            res.data.market_data.total_volume[filter.currency],
-            res.data.market_data.total_value_locked[filter.currency],
+            res.data.market_data.high_24h?.[filter.currency],
+            res.data.market_data.low_24h?.[filter.currency],
+            res.data.market_data.market_cap?.[filter.currency],
+            res.data.market_data.fully_diluted_valuation?.[filter.currency],
+            res.data.market_data.total_volume?.[filter.currency],
+            res.data.market_data.total_value_locked?.[filter.currency],
             res.data.market_data.circulating_supply,
             res.data.market_data.total_supply,
             res.data.market_data.max_supply,
@@ -105,8 +107,9 @@ export const CoinDetailScreen = () => {
       .get(
         `https://api.coingecko.com/api/v3/coins/${searchId}/market_chart?vs_currency=${filter.currency}&days=${filter.days}`,
       )
-      .then(async res => {
-        await setMarketChartData(
+      .then(res => {
+        console.log('market chart length:', res.data.prices?.length);
+        setMarketChartData(
           res.data.prices.map((price: [number, number], index: number) => {
             return {
               date: moment(price[0]).format('HH:mm'),
