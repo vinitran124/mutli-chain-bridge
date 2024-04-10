@@ -20,9 +20,15 @@ export const CoinDetailScreen = () => {
   const [filter, setFilter] = useState<MarketChartFilter>({
     fixedPrice: 3,
     currency: 'usd',
-    days: 1,
+    days: 0.1,
   });
   const [marketChartData, setMarketChartData] = useState<
+    CoinMarketChartModel[]
+  >([]);
+  const [marketChartDataEthfi, setMarketChartDataEthfi] = useState<
+    CoinMarketChartModel[]
+  >([]);
+  const [marketChartDataEna, setMarketChartDataEna] = useState<
     CoinMarketChartModel[]
   >([]);
   const [coinDetail, setCoinDetail] = useState<CoinDetail | undefined>();
@@ -119,6 +125,40 @@ export const CoinDetailScreen = () => {
           }),
         );
       });
+    setTimeout(() => {}, 2000);
+    await axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/ether-fi/market_chart?vs_currency=${filter.currency}&days=0.05`,
+      )
+      .then(res => {
+        console.log('market chart length:', res.data.prices?.length);
+        setMarketChartDataEthfi(
+          res.data.prices.map((price: [number, number], index: number) => {
+            return {
+              date: moment(price[0]).format('HH:mm'),
+              price: Number(price[1]).toFixed(3),
+              volumn: Number(res.data.total_volumes[index][1]).toFixed(0),
+            };
+          }),
+        );
+      });
+    setTimeout(() => {}, 2000);
+    await axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/ethena/market_chart?vs_currency=${filter.currency}&days=0.05`,
+      )
+      .then(res => {
+        console.log('market chart length:', res.data.prices?.length);
+        setMarketChartDataEna(
+          res.data.prices.map((price: [number, number], index: number) => {
+            return {
+              date: moment(price[0]).format('HH:mm'),
+              price: Number(price[1]).toFixed(3),
+              volumn: Number(res.data.total_volumes[index][1]).toFixed(0),
+            };
+          }),
+        );
+      });
   };
 
   const handleChangeFilter = (value: MarketChartFilter) => {
@@ -126,7 +166,7 @@ export const CoinDetailScreen = () => {
   };
 
   return (
-    <div className="pt-[100px] px-[24px] text-[#DFE5EC] ">
+    <div className="pt-[100px] px-[24px] text-[#DFE5EC]">
       {coinDetail ? (
         <div className="flex flex-row justify-between">
           <div className="w-[400px] overflow-y-auto">
@@ -150,7 +190,12 @@ export const CoinDetailScreen = () => {
                 </div>
               ))}
             </div>
-            <CoinMarketChart datas={marketChartData} />
+            <div className="flex flex-row w-full h-[100%]">
+              <CoinMarketChart datas={marketChartData} />
+              <CoinMarketChart datas={marketChartDataEthfi} />
+              <CoinMarketChart datas={marketChartDataEna} />
+            </div>
+            {/* <CoinMarketChart datas={marketChartData} /> */}
           </div>
         </div>
       ) : (

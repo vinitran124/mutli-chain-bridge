@@ -19,9 +19,9 @@ export const CoinMarketChart = ({
 }: {
   datas: CoinMarketChartModel[];
 }) => {
-  console.log('datas.length / 10', datas.length / 10);
   return (
-    <ResponsiveContainer width="90%" height="50%">
+   <>
+   <ResponsiveContainer width="90%" height="50%">
       <AreaChart
         data={datas}
         margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
@@ -32,7 +32,7 @@ export const CoinMarketChart = ({
             <stop offset="95%" stopColor="#534CF7" stopOpacity={0.4} />
           </linearGradient>
         </defs>
-        <XAxis dataKey="date" interval={2} />
+        <XAxis dataKey="date"  />
         <YAxis
           orientation="right"
           type="number"
@@ -53,6 +53,9 @@ export const CoinMarketChart = ({
         />
       </AreaChart>
     </ResponsiveContainer>
+
+    
+   </>
   );
 };
 
