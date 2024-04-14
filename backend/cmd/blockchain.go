@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bridge/etherman"
+	"bridge/util"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"log"
 
 	"bridge/etherman"

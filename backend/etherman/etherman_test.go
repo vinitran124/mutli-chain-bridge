@@ -55,4 +55,3 @@ func newTestingConfig() etherman.ChainConfig {
 //		}
 //	}
 //}
-
