@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import moment from 'moment';
 import axios from 'axios';
 import { CoinMarketChartModel } from '../model/market-chart.model';
-import { CoinMarketChart } from '../component/coin-detail/coin-market-chart.component';
 import { CoinInformation } from '../component/coin-detail/coin-information.component';
 import { CoinDetail } from '../model/coin-detail.model';
-import { MarketChartFilterDays } from '../const/coin-detail.const';
+import { CoinDetailMarketChart } from '../component/coin-detail/coin-detail-martket-chart';
+import { Interval } from '../const/interval.const';
 
 export interface MarketChartFilter {
   fixedPrice: number;
   currency: string;
   days: number;
+  interval: Interval;
 }
 
 export const CoinDetailScreen = () => {
@@ -21,39 +20,25 @@ export const CoinDetailScreen = () => {
     fixedPrice: 3,
     currency: 'usd',
     days: 0.1,
+    interval: Interval._1m,
   });
-  const [marketChartData, setMarketChartData] = useState<
-    CoinMarketChartModel[]
-  >([]);
-  const [marketChartDataEthfi, setMarketChartDataEthfi] = useState<
-    CoinMarketChartModel[]
-  >([]);
-  const [marketChartDataEna, setMarketChartDataEna] = useState<
-    CoinMarketChartModel[]
-  >([]);
   const [coinDetail, setCoinDetail] = useState<CoinDetail | undefined>();
+  const [intervalMarketChart, setIntervalMarketChart] = useState<Interval>(
+    Interval._1m,
+  );
 
   useEffect(() => {
     getData();
   }, [filter]);
 
-  //   const timerInterval = setInterval(() => {
-  //     // getData();
-
-  //     console.log('now: ', moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
-  //     // console.log("timerInterval", timerInterval);
-  //     // console.log("data", data);
-  //   }, 5000);
-
   const getData = async () => {
-    // const searchId = 'bella-protocol';
     const searchId = paramId ?? 'bella-protocol';
-    console.log('paramId:', paramId);
     // get detail
     await axios
-      .get(`https://api.coingecko.com/api/v3/coins/${searchId}`)
+      .get(
+        `http://127.0.0.1:9665/fetchAPI?endpoint=https://api.coingecko.com/api/v3/coins/${searchId}`,
+      )
       .then(res => {
-        console.log('res:', res);
         setCoinDetail(
           new CoinDetail(
             res.data.id,
@@ -107,58 +92,6 @@ export const CoinDetailScreen = () => {
           ),
         );
       });
-
-    // get martket chart
-    await axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/${searchId}/market_chart?vs_currency=${filter.currency}&days=${filter.days}`,
-      )
-      .then(res => {
-        console.log('market chart length:', res.data.prices?.length);
-        setMarketChartData(
-          res.data.prices.map((price: [number, number], index: number) => {
-            return {
-              date: moment(price[0]).format('HH:mm'),
-              price: Number(price[1]).toFixed(3),
-              volumn: Number(res.data.total_volumes[index][1]).toFixed(0),
-            };
-          }),
-        );
-      });
-    setTimeout(() => {}, 2000);
-    await axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/ether-fi/market_chart?vs_currency=${filter.currency}&days=0.05`,
-      )
-      .then(res => {
-        console.log('market chart length:', res.data.prices?.length);
-        setMarketChartDataEthfi(
-          res.data.prices.map((price: [number, number], index: number) => {
-            return {
-              date: moment(price[0]).format('HH:mm'),
-              price: Number(price[1]).toFixed(3),
-              volumn: Number(res.data.total_volumes[index][1]).toFixed(0),
-            };
-          }),
-        );
-      });
-    setTimeout(() => {}, 2000);
-    await axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/ethena/market_chart?vs_currency=${filter.currency}&days=0.05`,
-      )
-      .then(res => {
-        console.log('market chart length:', res.data.prices?.length);
-        setMarketChartDataEna(
-          res.data.prices.map((price: [number, number], index: number) => {
-            return {
-              date: moment(price[0]).format('HH:mm'),
-              price: Number(price[1]).toFixed(3),
-              volumn: Number(res.data.total_volumes[index][1]).toFixed(0),
-            };
-          }),
-        );
-      });
   };
 
   const handleChangeFilter = (value: MarketChartFilter) => {
@@ -166,42 +99,66 @@ export const CoinDetailScreen = () => {
   };
 
   return (
-    <div className="pt-[100px] px-[24px] text-[#DFE5EC]">
+    <div className="page-height mt-[100px] mb-[4px] mx-[24px] text-[#DFE5EC] overflow-y-hidden">
       {coinDetail ? (
-        <div className="flex flex-row justify-between">
-          <div className="w-[400px] overflow-y-auto">
-            <CoinInformation data={coinDetail} />
+        <div className="page-container-height flex flex-row justify-between overflow-y-hidden">
+          <div className="w-[400px] pr-[8px] mr-[8px] overflow-y-auto">
+            <CoinInformation key={coinDetail.id} data={coinDetail} />
           </div>
-          <div className="flex-1 flex flex-col items-center">
+          <div className="flex-1 flex flex-col items-center justify-between space-y-[8px]">
             <div className="flex flex-row justify-center space-x-[8px] rounded-[8px]">
-              {MarketChartFilterDays.getList().map(item => (
-                <div
-                  className={
-                    'rounded-[8px] w-[45px] h-[28px] cursor-pointer text-center bg-[#704CE3]'
-                  }
-                  onClick={() =>
-                    handleChangeFilter({
-                      ...filter,
-                      days: item?.value ?? 1,
-                    })
-                  }
-                >
-                  {item?.label}
-                </div>
-              ))}
+              <div
+                className={
+                  'rounded-[8px] w-[45px] h-[28px] cursor-pointer text-center bg-[#704CE3]'
+                }
+                onClick={() => {
+                  setIntervalMarketChart(Interval._1m);
+                }}
+              >
+                1m
+              </div>
+              <div
+                className={
+                  'rounded-[8px] w-[45px] h-[28px] cursor-pointer text-center bg-[#704CE3]'
+                }
+                onClick={() => {
+                  setIntervalMarketChart(Interval._1d);
+                }}
+              >
+                1d
+              </div>{' '}
+              <div
+                className={
+                  'rounded-[8px] w-[45px] h-[28px] cursor-pointer text-center bg-[#704CE3]'
+                }
+                onClick={() => {
+                  setIntervalMarketChart(Interval._1M);
+                }}
+              >
+                1M
+              </div>{' '}
+              <div
+                className={
+                  'rounded-[8px] w-[45px] h-[28px] cursor-pointer text-center bg-[#704CE3]'
+                }
+                onClick={() => {
+                  setIntervalMarketChart(Interval._1y);
+                }}
+              >
+                1y
+              </div>
             </div>
-            <div className="flex flex-row w-full h-[100%]">
-              <CoinMarketChart datas={marketChartData} />
-              <CoinMarketChart datas={marketChartDataEthfi} />
-              <CoinMarketChart datas={marketChartDataEna} />
+            <div className="flex-1 w-full h-[80%] p-[1px] bg-[#1B232D]">
+              <CoinDetailMarketChart
+                symbol={coinDetail.symbol}
+                interval={intervalMarketChart}
+              />
             </div>
-            {/* <CoinMarketChart datas={marketChartData} /> */}
           </div>
         </div>
       ) : (
         <div>Coin not found</div>
       )}
-      <button onClick={getData}>Sync data</button>
     </div>
   );
 };

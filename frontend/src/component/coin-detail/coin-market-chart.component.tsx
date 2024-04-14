@@ -8,12 +8,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { CoinMarketChartModel } from '../../model/market-chart.model';
-import moment from 'moment';
+// import moment from 'moment';
 import { formatPrice } from '../../utils';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-
 export const CoinMarketChart = ({
   datas,
 }: {

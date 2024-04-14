@@ -216,7 +216,7 @@ export const CoinInformation = ({ data }: { data: CoinDetail }) => {
           <div className='flex flex-row space-x-[4px]'>
           {data.coinInformation?.chains?.map((chain, index) => {
             return (
-              index < 3 && (
+              index < 3 && chain && (
                 <a
                   className="font-[600] text-[12px] text-center align-middle h-[28px] px-[10px] py-[6px] bg-[rgb(33,45,59)] rounded-[8px]"
                   href={chain?.site}
@@ -235,8 +235,8 @@ export const CoinInformation = ({ data }: { data: CoinDetail }) => {
           <div className='flex flex-row space-x-[4px]'>
           {data.coinInformation?.categories?.map((category, index) => {
             return (
-              index < 1 && (
-                <a
+              index < 1 && category && (
+                <a key={index}
                   className="font-[600] text-[12px] text-center align-middle h-[28px] px-[10px] py-[6px] bg-[rgb(33,45,59)] rounded-[8px]"
                 >
                   <div className="flex flex-row space-x-[2px] items-center ">
@@ -247,7 +247,7 @@ export const CoinInformation = ({ data }: { data: CoinDetail }) => {
             );
           })}
           </div>
-        </div>
+       </div>
       </div>
     </div>
   );

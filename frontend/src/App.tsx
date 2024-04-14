@@ -46,7 +46,7 @@ function App() {
       <ToastContainer />
       <Header sidebarSubject={sidebarListener} />
       <Sidebar listener={sidebarListener$} />
-      <div className=" overflow-y-auto max-h-full h-full">
+      <div className=" overflow-y-hidden max-h-full h-full">
         <Routes>
           <Route
             path="/"
