@@ -19,7 +19,6 @@ services:
     command:
       - "/bin/sh"
       - "-c"
-      - "go run cmd/*.go migration --action up"
       - "/app/main api --cfg /app/config.toml"
 
   blockchain:
@@ -103,7 +102,8 @@ services:
     env_file:
       - .env
     ports:
-      - 5432:5432
+      - 5432
+    user: root
     volumes:
       - ./pgdata/production/data:${PGDATA}
       - ./config/postgres/initdb.d:/docker-entrypoint-initdb.d
@@ -116,7 +116,7 @@ services:
     networks:
       - bridge
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1s
       timeout: 2s
       retries: 5
@@ -131,21 +131,17 @@ services:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis-custom.conf
     restart: unless-stopped
     ports:
-      - 6379:6379
+      - 6379
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
     command:
-      [
-        "redis-server",
-        "--include /usr/local/etc/redis/redis-custom.conf"
-      ]
+      ["redis-server", "--include /usr/local/etc/redis/redis-custom.conf"]
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 1s
       timeout: 2s
       retries: 10
 
 networks:
   bridge:
-
