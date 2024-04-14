@@ -7,6 +7,11 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"log"
 
+	"bridge/etherman"
+	"bridge/util"
+
+	"github.com/ethereum/go-ethereum/common"
+
 	"bridge/config"
 	"bridge/content/datastore"
 	"bridge/context"

@@ -8,6 +8,8 @@ import (
 	"log"
 	"strings"
 
+	"bridge/util"
+
 	"bridge/content/bob"
 	"bridge/content/datastore"
 	"bridge/etherman"
