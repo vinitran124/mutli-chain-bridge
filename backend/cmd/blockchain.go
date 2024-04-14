@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
+	"log"
+
 	"bridge/etherman"
 	"bridge/util"
-	"fmt"
+
 	"github.com/ethereum/go-ethereum/common"
-	"log"
 
 	"bridge/config"
 	"bridge/content/datastore"

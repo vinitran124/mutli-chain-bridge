@@ -1,11 +1,12 @@
 package content
 
 import (
-	"bridge/util"
 	"context"
 	"database/sql"
 	"log"
 	"strings"
+
+	"bridge/util"
 
 	"bridge/content/bob"
 	"bridge/content/datastore"

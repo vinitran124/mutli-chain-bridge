@@ -1,10 +1,11 @@
 package content
 
 import (
-	"bridge/util"
 	"context"
 	"fmt"
 	"strings"
+
+	"bridge/util"
 
 	"bridge/content/bob"
 	"bridge/etherman"
