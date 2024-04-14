@@ -4,6 +4,11 @@ import (
 	"fmt"
 	"log"
 
+	"bridge/etherman"
+	"bridge/util"
+
+	"github.com/ethereum/go-ethereum/common"
+
 	"bridge/config"
 	"bridge/content/datastore"
 	"bridge/context"
@@ -51,10 +56,16 @@ func startBlockchain(c *cli.Context) error {
 				continue
 			}
 
-			err = ChainRepository(token.ChainID).CallWithdrawal(token.Address, bridgeRq.UserAddress, bridgeRq.RawAmount)
+			etherClient, err := etherman.NewClientFromChainId(util.ToUint64(token.ChainID), Config().Etherman)
 			if err != nil {
 				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
-				continue
+				return
+			}
+
+			_, err = etherClient.CallWithdrawal(ctx, etherClient.SenderAddress[0], common.HexToAddress(token.Address), common.HexToAddress(bridgeRq.UserAddress), util.ToBigInt(bridgeRq.RawAmount))
+			if err != nil {
+				log.Println(fmt.Sprintf("event id %s: %e", msg.Payload, err))
+				return
 			}
 
 			err = bridgeStr.SetComplete(ctx, SQLRepository(), bridgeRq.ID.String())
