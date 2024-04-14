@@ -172,7 +172,7 @@ func (etherMan *Client) AddOrReplaceAuth(auth bind.TransactOpts) error {
 	return nil
 }
 
-func (etherMan *Client) TransferErc20Token(account, token, to common.Address, amount *big.Int) (*types.Transaction, error) {
+func (etherMan *Client) TransferErc20Token(ctx context.Context, account, token, to common.Address, amount *big.Int) (*types.Transaction, error) {
 	opts, err := etherMan.getAuthByAddress(account)
 	if errors.Is(err, ErrNotFound) {
 		return nil, errors.New("can't find account private key to sign tx")
@@ -319,4 +319,18 @@ func (etherMan *Client) TimeOfBlock(block *big.Int) (time.Time, error) {
 
 	timeStamp := time.Unix(int64(header.Time), 0)
 	return timeStamp, nil
+}
+
+func (etherMan *Client) CallWithdrawal(ctx context.Context, account, token, user common.Address, amount *big.Int) (*types.Transaction, error) {
+	opts, err := etherMan.getAuthByAddress(account)
+	if errors.Is(err, ErrNotFound) {
+		return nil, errors.New("can't find account private key to sign tx")
+	}
+
+	tx, err := etherMan.BridgeRouter.Withdraw(opts, token, user, amount)
+	if err != nil {
+		return nil, fmt.Errorf("error withdraw token to %s. Error: %w", user.String(), err)
+	}
+
+	return tx, nil
 }

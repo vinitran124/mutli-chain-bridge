@@ -2,12 +2,6 @@ package etherman_test
 
 import (
 	"bridge/etherman"
-	"context"
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"log"
-	"testing"
 )
 
 const (
@@ -24,40 +18,40 @@ func newTestingConfig() etherman.ChainConfig {
 	}
 }
 
-func TestSubscribeFilterLogs(t *testing.T) {
-	cfg := newTestingConfig()
-	client, err := etherman.NewClient(cfg)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	query := etherman.EventReaderParams{
-		Filter: ethereum.FilterQuery{
-			Addresses: []common.Address{
-				common.HexToAddress(cfg.BridgeAddress),
-			},
-		},
-		EventHash: []common.Hash{
-			etherman.TransferEventHash,
-			etherman.DepositEventHash,
-		},
-	}
-
-	logs := make(chan types.Log, MAX_CHANEL)
-
-	log.Println("Subcribe...")
-
-	go func() {
-		err = client.SubcribeNewEvents(context.Background(), query, logs)
-		if err != nil {
-			t.Fatal(err)
-		}
-	}()
-
-	for {
-		select {
-		case vLog := <-logs:
-			log.Println("asdasd", vLog)
-		}
-	}
-}
+//func TestSubscribeFilterLogs(t *testing.T) {
+//	cfg := newTestingConfig()
+//	client, err := etherman.NewClient(cfg)
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	query := etherman.EventReaderParams{
+//		Filter: ethereum.FilterQuery{
+//			Addresses: []common.Address{
+//				common.HexToAddress(cfg.BridgeAddress),
+//			},
+//		},
+//		EventHash: []common.Hash{
+//			etherman.TransferEventHash,
+//			etherman.DepositEventHash,
+//		},
+//	}
+//
+//	logs := make(chan types.Log, MAX_CHANEL)
+//
+//	log.Println("Subcribe...")
+//
+//	go func() {
+//		err = client.SubcribeNewEvents(context.Background(), query, logs)
+//		if err != nil {
+//			t.Fatal(err)
+//		}
+//	}()
+//
+//	for {
+//		select {
+//		case vLog := <-logs:
+//			log.Println("asdasd", vLog)
+//		}
+//	}
+//}

@@ -50,7 +50,7 @@ func SetContextSQL(cfg db.DatabaseConfig) {
 	client := db.NewSQLDB(cfg)
 	err := client.Ping()
 	if err != nil {
-		log.Fatal("Set context SQL error", err)
+		log.Fatal("Set context SQL error ", err)
 		return
 	}
 	ctx = context.WithValue(ctx, contextSQLRepository, client)

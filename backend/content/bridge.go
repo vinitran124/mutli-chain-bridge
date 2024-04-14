@@ -1,6 +1,7 @@
 package content
 
 import (
+	"bridge/util"
 	"context"
 	"database/sql"
 	"log"
@@ -58,7 +59,7 @@ func (v *V1Router) bridge(c *gin.Context) {
 		return
 	}
 
-	etherClient, err := etherman.NewClientFromChainId(ToUint64(payload.InChain), ConfigRepository().Etherman)
+	etherClient, err := etherman.NewClientFromChainId(util.ToUint64(payload.InChain), ConfigRepository().Etherman)
 	if err != nil {
 		responseFailureWithMessage(c, "client not found")
 		return
@@ -71,7 +72,7 @@ func (v *V1Router) bridge(c *gin.Context) {
 	}
 
 	// require amount output token in pool must be grater than amount input token
-	if ToBigInt(payload.Amount).Cmp(amountInPoolTokenOut) == 1 {
+	if util.ToBigInt(payload.Amount).Cmp(amountInPoolTokenOut) == 1 {
 		responseFailureWithMessage(c, "amount output token is not enough")
 		return
 	}
