@@ -5,7 +5,6 @@ import (
 
 	"bridge/config"
 
-	"bridge/app/blockchain/chainFactory"
 	"bridge/context"
 
 	"github.com/redis/go-redis/v9"
@@ -27,10 +26,6 @@ func SQLRepository() bob.DB {
 
 func RedisRepository() *redis.Client {
 	return context.GetContextRedisClient()
-}
-
-func ChainRepository(chainId string) chainFactory.IChain {
-	return context.GetContextChainClient(chainId)
 }
 
 func Config() *config.Config {

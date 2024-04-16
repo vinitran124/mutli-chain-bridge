@@ -54,7 +54,6 @@ func startCrawler(c *cli.Context) error {
 	for {
 		select {
 		case event := <-events:
-
 			tx := datastore.DatastoreTransaction{}
 			transaction, err := tx.Insert(ctx, SQLRepository(), EventDatastoreToBob(event))
 			if err != nil {

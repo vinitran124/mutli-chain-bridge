@@ -11,7 +11,6 @@ import (
 
 const (
 	appName = "bridge-system"
-	envPath = ".env,.env.local"
 )
 
 var (
