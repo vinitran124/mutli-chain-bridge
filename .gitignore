@@ -1,6 +1,3 @@
 /pgdata
 /redisdata
 /docker-compose.override.yml
-/contract/bridge/artifacts
-/contract/bridge/cache
-/contract/bridge/node_modules

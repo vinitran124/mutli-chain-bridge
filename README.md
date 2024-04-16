@@ -25,6 +25,18 @@ go run cmd/*.go migration --action up   // action up to update database
 go run cmd/*.go migration --action down // action down to revert database
 ```
 
+Generation bob
+```
+cd backend
+go run github.com/stephenafamo/bob/gen/bobgen-psql@latest -c ./config/bobgen.yaml
+```
+
+Deploy and verify bridge contract in Hardhat
+```
+cd contract/bridge
+npx hardhat run scripts/deploy.js --network <network>
+npx hardhat verify --network <network> <contract-address> <parameters>
+```
 ## Chain Information
 
 | Name        | ChainId  | Explorer                     |

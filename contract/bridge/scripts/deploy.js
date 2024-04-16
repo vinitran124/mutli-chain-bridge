@@ -35,7 +35,7 @@ async function main() {
   console.log("bridge: ");
   console.log("bridge: ", bridgeRouter.target);
 
-  await bridgeRouter.createBridgePool("0x32D7eEE6513224f459D221BfED0C3af45343CbB7");
+  // await bridgeRouter.createBridgePool("0x32D7eEE6513224f459D221BfED0C3af45343CbB7");
   // sleep(30000)
   // sleep(30000)
   // await bridgeRouter.createBridgePool("0x5846e4dbff5E8B3718281997264bD2B3e074C3A8");
@@ -57,4 +57,6 @@ async function main() {
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main().catch((error) => {});
+main().catch((error) => {
+  console.log(error)
+});
