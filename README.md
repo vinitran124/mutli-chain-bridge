@@ -25,9 +25,23 @@ go run cmd/*.go migration --action up   // action up to update database
 go run cmd/*.go migration --action down // action down to revert database
 ```
 
+## Chain Information
+
+| Name        | ChainId  | Explorer                     |
+|:------------|:---------|:-----------------------------|
+| BSC Testnet | 97       | https://testnet.bscscan.com  |
+| ETH Sepolia | 11155111 | https://sepolia.etherscan.io |
+
 ## Token Information
 
 | Symbol | ChainId     | Address                       |
 | :-------- | :------- | :-------------------------------- |
 | VINI      | 11155111 | 0x15f8253779428d9ea5b054deef3e454d539ddf7e |
 | VINI      | 97 | 0x6b08b796b4b43d565c34cf4b57d8c871db410ebe |
+
+## Bridge Information
+
+| Name          | ChainId     | Address                       |
+|:--------------| :------- | :-------------------------------- |
+| Bridge Router | 97 | 0x8d71457D68cF892E8B925dda3057F488DBb75b48 |
+
