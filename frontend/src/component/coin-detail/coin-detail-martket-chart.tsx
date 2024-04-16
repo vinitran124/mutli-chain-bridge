@@ -81,10 +81,10 @@ export const CoinDetailMarketChart = ({
   };
 
   const syncMarketChart = async (isUpdateChart: boolean) => {
-    console.log(`syncMarketChart: http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=${symbol?.toUpperCase()}USDT&interval=${interval}&limit=${limit}`)
+    console.log(`syncMarketChart: https://api.binance.com/api/v3/klines?symbol=${symbol?.toUpperCase()}USDT&interval=${interval}&limit=${limit}`)
     if (candleSeries) {
       await axios(
-        `http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=${symbol?.toUpperCase()}USDT&interval=${interval}&limit=${limit}`,
+        `https://api.binance.com/api/v3/klines?symbol=${symbol?.toUpperCase()}USDT&interval=${interval}&limit=${limit}`,
       )
         .then((res: any) => {
           const cdata = res.data.map((d: any) => {
@@ -113,7 +113,6 @@ export const CoinDetailMarketChart = ({
 
   return (
     <div className="flex flex-row w-full h-full">
-      {interval}
       <div id="coin-detail-market-chart" className="w-full h-full"></div>
     </div>
   );

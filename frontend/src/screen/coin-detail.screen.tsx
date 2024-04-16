@@ -36,7 +36,7 @@ export const CoinDetailScreen = () => {
     // get detail
     await axios
       .get(
-        `http://127.0.0.1:9665/fetchAPI?endpoint=https://api.coingecko.com/api/v3/coins/${searchId}`,
+        `https://api.coingecko.com/api/v3/coins/${searchId}`,
       )
       .then(res => {
         setCoinDetail(
