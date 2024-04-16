@@ -18,7 +18,7 @@ function sleep (time) {
 }
 
 async function main() {
-  const BRIDGEPOOL = await hre.ethers.getContractFactory("BridgePool");
+  // const BRIDGEPOOL = await hre.ethers.getContractFactory("BridgePool");
   // const TOKEN = await hre.ethers.getContractFactory("Token");
   const WETH = await hre.ethers.getContractFactory("WETH");
   const BRIDGEROUTER = await hre.ethers.getContractFactory("BridgeRouter");
@@ -36,7 +36,7 @@ async function main() {
   console.log("bridge: ", bridgeRouter.target);
 
   // await bridgeRouter.createBridgePool("0x32D7eEE6513224f459D221BfED0C3af45343CbB7");
-  // sleep(30000)
+  // sleep(3000)
   // sleep(30000)
   // await bridgeRouter.createBridgePool("0x5846e4dbff5E8B3718281997264bD2B3e074C3A8");
 
