@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"database/sql/driver"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/stephenafamo/scan"
 )
