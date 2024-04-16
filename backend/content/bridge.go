@@ -3,7 +3,7 @@ package content
 import (
 	"context"
 	"database/sql"
-	"log"
+	"fmt"
 	"strings"
 
 	"bridge/util"
@@ -68,7 +68,7 @@ func (v *V1Router) bridge(c *gin.Context) {
 
 	amountInPoolTokenOut, err := etherClient.AmountTokenInBridgePool(common.HexToAddress(tokenOut.Address))
 	if err != nil {
-		responseErrInternalServerError(c)
+		responseFailureWithMessage(c, fmt.Sprintf("can not get amount in pool token. token address: %s", tokenOut.Address))
 		return
 	}
 
@@ -95,14 +95,13 @@ func (v *V1Router) bridge(c *gin.Context) {
 		UserAddress: payload.UserAddress,
 	})
 	if err != nil {
-		log.Println(err)
-		responseErrInternalServerError(c)
+		responseFailureWithMessage(c, "can not insert bridge request")
 		return
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		responseErrInternalServerError(c)
+		responseFailureWithMessage(c, "can not commit tx")
 		return
 	}
 
